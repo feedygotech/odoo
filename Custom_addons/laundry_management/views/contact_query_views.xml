@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Contact Query List View -->
+    <record id="laundry_contact_query_list_view" model="ir.ui.view">
+        <field name="name">laundry.contact.query.list</field>
+        <field name="model">laundry.contact.query</field>
+        <field name="arch" type="xml">
+            <list string="Customer Queries" create="false"
+                  decoration-info="state == 'new'" 
+                  decoration-warning="state == 'in_progress'" 
+                  decoration-success="state == 'resolved'" 
+                  decoration-muted="state == 'closed'">
+                <field name="reference" string="Reference"/>
+                <field name="create_date" string="Received Date"/>
+                <field name="name" string="Customer Name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="subject"/>
+                <field name="priority"/>
+                <field name="assigned_to"/>
+                <field name="days_since_received" string="Days Ago"/>
+                <field name="state" string="Status"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Contact Query Form View -->
+    <record id="laundry_contact_query_form_view" model="ir.ui.view">
+        <field name="name">laundry.contact.query.form</field>
+        <field name="model">laundry.contact.query</field>
+        <field name="arch" type="xml">
+            <form string="Customer Query">
+                <header>
+                    <button name="action_progress" type="object" string="Start Progress" 
+                            class="oe_highlight" invisible="state != 'new'"/>
+                    <button name="action_resolve" type="object" string="Resolve" 
+                            class="oe_highlight" invisible="state != 'in_progress' or not assigned_to"/>
+                    <button name="action_close" type="object" string="Close" 
+                            class="btn-secondary" invisible="state in ['closed']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,in_progress,resolved,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                        <label for="subject" string="Subject"/>
+                        <field name="subject" placeholder="Query Subject" readonly="state == 'closed'"/>
+                    </div>
+                    
+                    <group>
+                        <group string="Customer Information">
+                            <field name="name" readonly="state == 'closed'"/>
+                            <field name="email" widget="email" readonly="state == 'closed'"/>
+                            <field name="phone" widget="phone" readonly="state == 'closed'"/>
+                            <field name="partner_id" readonly="1" invisible="not partner_id"/>
+                        </group>
+                        <group string="Query Management">
+                            <field name="priority" readonly="state in ['resolved', 'closed']"/>
+                            <field name="assigned_to" readonly="state == 'closed'"/>
+                            <field name="days_since_received" readonly="1"/>
+                            <field name="create_date" string="Received Date" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Customer Message">
+                            <field name="message" placeholder="Customer's message..." nolabel="1" readonly="1"/>
+                        </page>
+                        <page string="Response" invisible="state == 'new'">
+                            <group>
+                                <field name="response_date" readonly="1" invisible="not response_date"/>
+                            </group>
+                            <field name="response" placeholder="Type your response to the customer..." nolabel="1" readonly="state == 'closed'"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <!-- Temporarily commented out chatter until model inheritance is properly applied
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+                -->
+            </form>
+        </field>
+    </record>
+
+    <!-- Contact Query Search View -->
+    <record id="laundry_contact_query_search_view" model="ir.ui.view">
+        <field name="name">laundry.contact.query.search</field>
+        <field name="model">laundry.contact.query</field>
+        <field name="arch" type="xml">
+            <search string="Search Customer Queries">
+                <field name="name" string="Customer Name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="subject"/>
+                <field name="message"/>
+                <field name="assigned_to"/>
+                
+                <filter string="New Queries" name="new" domain="[('state', '=', 'new')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Resolved" name="resolved" domain="[('state', '=', 'resolved')]"/>
+                <filter string="My Queries" name="my_queries" domain="[('assigned_to', '=', uid)]"/>
+                
+                <separator/>
+                <filter string="High Priority" name="high_priority" domain="[('priority', '=', 'high')]"/>
+                <filter string="Critical" name="critical" domain="[('priority', '=', 'critical')]"/>
+                
+                <separator/>
+                <filter string="Last 7 Days" name="last_week" 
+                        domain="[('create_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Last 30 Days" name="last_month" 
+                        domain="[('create_date', '>=', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Priority" name="group_priority" context="{'group_by': 'priority'}"/>
+                    <filter string="Assigned To" name="group_assigned" context="{'group_by': 'assigned_to'}"/>
+                    <filter string="Received Date" name="group_date" context="{'group_by': 'create_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Contact Query Kanban View -->
+    <record id="laundry_contact_query_kanban_view" model="ir.ui.view">
+        <field name="name">laundry.contact.query.kanban</field>
+        <field name="model">laundry.contact.query</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column" create="false" quick_create="false"
+                    records_draggable="false">
+                <field name="state"/>
+                <field name="priority"/>
+                <field name="name"/>
+                <field name="subject"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="assigned_to"/>
+                <field name="days_since_received"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_content">
+                                <div class="o_kanban_record_top" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div class="o_kanban_record_headings" style="flex: 1; min-width: 0;">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                        <div class="o_kanban_record_subtitle">
+                                            <field name="subject"/>
+                                        </div>
+                                    </div>
+                                    <div class="oe_kanban_record_top_right">
+                                        <span class="badge badge-pill" t-attf-style="background-color: {{ {'low': '#e9ecef', 'normal': '#d1ecf1', 'high': '#fff3cd', 'critical': '#f8d7da'}[record.priority.raw_value] or '#d1ecf1' }}; color: {{ {'low': '#495057', 'normal': '#0c5460', 'high': '#856404', 'critical': '#721c24'}[record.priority.raw_value] or '#0c5460' }}; border: 1px solid {{ {'low': '#ced4da', 'normal': '#bee5eb', 'high': '#ffeaa7', 'critical': '#f5c6cb'}[record.priority.raw_value] or '#bee5eb' }};">
+                                            <t t-esc="{'low': 'Low', 'normal': 'Normal', 'high': 'High', 'critical': 'Critical'}[record.priority.raw_value] or 'Normal'"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="o_kanban_record_body">
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <i class="fa fa-envelope"/> <field name="email"/>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <i class="fa fa-phone"/> <field name="phone"/>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2" t-if="record.assigned_to.raw_value">
+                                        <div class="col-12">
+                                            <i class="fa fa-user"/> Assigned to: <field name="assigned_to"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <span class="badge badge-pill badge-info">
+                                            <t t-esc="record.days_since_received.value"/> days ago
+                                        </span>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="state" widget="label_selection" 
+                                               options="{'classes': {'new': 'primary', 'in_progress': 'warning', 'resolved': 'success', 'closed': 'default'}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Contact Query Action -->
+    <record id="laundry_contact_query_action" model="ir.actions.act_window">
+        <field name="name">Customer Queries</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">laundry.contact.query</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="laundry_contact_query_search_view"/>
+        <field name="context">{'create': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No customer queries yet!
+            </p>
+            <p>
+                Customer queries submitted through your website contact form will appear here.
+                You can manage, respond to, and track the status of each query.
+            </p>
+        </field>
+    </record>
+
+    <!-- Customer Queries Menu -->
+    <menuitem id="laundry_queries_menu" name="Customer Queries" parent="laundry_management.laundry_management_menu" action="laundry_contact_query_action" sequence="2"/>
+</odoo>

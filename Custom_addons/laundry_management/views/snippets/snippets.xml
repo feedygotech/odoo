@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- This is the actual snippet structure shown when dropped -->
+  <template id="laundry_service_snippet" name="Laundry Service Snippet" t-name="laundry_management.laundry_service_snippet">
+    <section class="s_laundry_services_snippet o_colored_level pt32 pb32"
+             data-snippet="laundry_service_snippet"
+             data-name="Laundry Services" style="min-height: 200px;">
+      <div class="container">
+        <div class="row s_nb_column_fixed">
+          <div class="col-12">
+            <div class="text-center mb-5">
+              <h2 class="display-5 fw-bold">Our Services</h2>
+              <p class="text-muted">Explore the wide range of laundry services we offer to keep your clothes fresh and clean.</p>
+            </div>
+
+            <div class="row" id="dynamic_laundry_services">
+              <!-- Dynamic data loads here via JS -->
+              <div class="text-center w-100">
+                <i class="fa fa-spinner fa-spin text-primary" style="font-size: 24px;"></i> Loading...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- Register the snippet into the Website Editor -->
+  <template id="laundry_snippet_add_to_content" inherit_id="website.snippets" name="Laundry Snippet Registration">
+    <xpath expr="//snippets[@id='snippet_content']" position="inside">
+      <t t-snippet="laundry_management.laundry_service_snippet" string="Laundry Services" t-thumbnail="/laundry_management/static/description/service_snippet_thumbnail.png"/>
+      <t t-snippet="laundry_management.laundry_price_snippet" string='Price Section' t-thumbnail="/laundry_management/static/description/price_snippet_thumbnail.png"/>
+    </xpath>
+    <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+      <t t-snippet="laundry_management.custom_contact_form_snippet" string="Contact Form" group="contact_and_forms" t-thumbnail="/laundry_management/static/description/contact_form_thumbnail.png"/>
+    </xpath>
+  </template>
+</odoo>

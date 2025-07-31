@@ -21,7 +21,8 @@
 ###############################################################################
 from . import laundry_order
 from . import sale_advance_payment
-from . import washing_type
 from . import washing_washing
-from . import washing_work
-from . import pos_laundry
+from . import pos_order
+from . import service
+from . import contact_query
+from . import pickup_request
