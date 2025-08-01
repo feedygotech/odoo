@@ -92,7 +92,7 @@ class LaundryService(models.Model):
         snapshot_vals = []
         category_seq = 10
         
-        for category in self.pos_category_id.child_ids:
+        for category in self.pos_category_id.child_ids.sorted('sequence'):
             products = self.env['product.product'].search([('pos_categ_ids', '=', category.id)])
             if products:
                 product_seq = 10
