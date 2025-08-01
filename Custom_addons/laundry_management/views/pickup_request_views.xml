@@ -1,0 +1,209 @@
+<odoo>
+  <record id="view_laundry_pickup_request_form" model="ir.ui.view">
+    <field name="name">laundry.pickup.request.form</field>
+    <field name="model">laundry.pickup.request</field>
+    <field name="arch" type="xml">
+      <form string="Pickup Request">
+        <header>
+          <button name="action_mark_contacted" type="object" string="Mark as Contacted" 
+                  invisible="state != 'new'" class="btn-primary"/>
+          <button name="action_mark_completed" type="object" string="Mark as Completed" 
+                  invisible="state not in ['contacted']" class="btn-success"/>
+          <button name="action_mark_cancelled" type="object" string="Cancel Request" 
+                  invisible="state in ['completed', 'cancelled']" class="btn-secondary"/>
+          <field name="state" widget="statusbar"/>
+        </header>
+        <sheet>
+          <div class="oe_title">
+            <h1>
+              <field name="reference" readonly="1"/>
+            </h1>
+            <label for="name"/>
+            <field name="name" placeholder="Customer Name" required="1"/>
+          </div>
+          
+          <!-- Customer Management Section - Only visible after contacted -->
+          <div class="alert alert-info" invisible="state not in ['new', 'contacted']" role="alert">
+            <div class="row">
+              <div class="col-12">
+                <h5 class="mb-3"><i class="fa fa-users me-2"></i> Customer Management</h5>
+              </div>
+            </div>
+            <field name="customer_exists" invisible="1"/>
+            <field name="partner_id" invisible="1"/>
+            <!-- New Customer Section -->
+            <div class="row mb-3" invisible="customer_exists">
+              <div class="col-md-8">
+                <div class="d-flex align-items-center">
+                  <i class="fa fa-user-plus text-primary me-3" style="font-size: 2em;"></i>
+                  <div>
+                    <h6 class="mb-1 text-primary">New Customer Detected</h6>
+                    <p class="mb-0 text-muted">This customer doesn't exist in your contacts database.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 text-end">
+                <button name="action_create_customer" type="object" string="Create Customer" 
+                        class="btn btn-primary" icon="fa-user-plus"/>
+              </div>
+            </div>
+            <!-- Existing Customer Section with Quick Actions side by side -->
+            <div class="row mb-3" invisible="not customer_exists">
+              <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                  <i class="fa fa-user-check text-success me-3" style="font-size: 2em;"></i>
+                  <div>
+                    <h6 class="mb-1 text-success">Existing Customer Found</h6>
+                    <div class="d-flex align-items-center">
+                      <span class="text-muted me-2">Customer:</span>
+                      <field name="partner_id" readonly="1" nolabel="1"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6" invisible="phone_mismatch">
+                <h6 class="mb-3"><i class="fa fa-bolt me-2"></i> Quick Actions</h6>
+                <div class="row">
+                  <div class="col-6 mb-2">
+                    <button name="action_create_pos_order" type="object" string="Launch POS" 
+                            class="btn btn-success w-100" icon="fa-shopping-cart"/>
+                  </div>
+                  <div class="col-6 mb-2">
+                    <button name="action_open_pos_for_customer" type="object" string="View Profile" 
+                            class="btn btn-info w-100" icon="fa-user"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Phone Mismatch Warning below both columns -->
+            <div class="row mb-3" invisible="phone_mismatch == False">
+              <div class="col-12">
+                <div class="alert alert-warning d-flex align-items-center" role="alert">
+                  <i class="fa fa-exclamation-triangle me-2" style="font-size: 1.5em;"></i>
+                  <div>
+                    <strong>Phone Number Mismatch:</strong> The phone number provided (<field name="phone" readonly="1" nolabel="1"/>) does not match the one on file for this customer <field name="partner_id" readonly="1" nolabel="1"/>.<br/>
+                    Do you want to update the customer phone number to the new one?
+                    <button name="action_update_customer_phone" type="object" string="Update Phone" class="btn btn-warning btn-sm ms-2"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Pro Tip Section - Only show when customer is linked and no phone mismatch -->
+            <div class="row" invisible="not partner_id or phone_mismatch">
+              <div class="col-12">
+                <div class="mt-2">
+                  <div class="btn btn-outline-info btn-sm w-100 text-start" style="cursor: default; border-style: dashed;">
+                    <i class="fa fa-lightbulb me-2"></i>
+                    <strong>Pro Tip:</strong> Click "Launch POS" to instantly start processing orders with this customer pre-selected
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <group>
+            <group string="Customer Information">
+              <field name="email" widget="email" required="1"/>
+              <field name="phone" widget="phone" required="1"/>
+            </group>
+            <group string="Pickup Details">
+              <field name="pickup_street" required="1"/>
+              <field name="pickup_city" required="1"/>
+              <field name="pickup_state" required="1"/>
+              <field name="pickup_zip" required="1"/>
+              <field name="pickup_country" required="1"/>
+              <field name="landmark"/>
+            </group>
+          </group>
+          <group string="Notes">
+            <field name="notes" placeholder="Add any notes about this pickup request..."/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_laundry_pickup_request_list" model="ir.ui.view">
+    <field name="name">laundry.pickup.request.list</field>
+    <field name="model">laundry.pickup.request</field>
+    <field name="arch" type="xml">
+      <list string="Pickup Requests" decoration-info="state=='new'" decoration-warning="state=='contacted'" decoration-success="state=='completed'" decoration-muted="state=='cancelled'">
+        <field name="reference"/>
+        <field name="create_date"/>
+        <field name="name"/>
+        <field name="phone"/>
+        <field name="pickup_street"/>
+        <field name="pickup_city"/>
+        <field name="pickup_state"/>
+        <field name="pickup_zip"/>
+        <field name="pickup_country"/>
+        <field name="partner_id"/>
+        <field name="state"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_laundry_pickup_request_search" model="ir.ui.view">
+    <field name="name">laundry.pickup.request.search</field>
+    <field name="model">laundry.pickup.request</field>
+    <field name="arch" type="xml">
+      <search string="Search Pickup Requests">
+        <field name="name" string="Customer Name"/>
+        <field name="phone" string="Phone Number"/>
+        <field name="pickup_city" string="City"/>
+        <field name="pickup_state" string="State"/>
+        <field name="pickup_country" string="Country"/>
+        <field name="email" string="Email"/>
+        <separator/>
+        <filter name="filter_new" string="New Requests" domain="[('state', '=', 'new')]"/>
+        <filter name="filter_contacted" string="Contacted" domain="[('state', '=', 'contacted')]"/>
+        <filter name="filter_completed" string="Completed" domain="[('state', '=', 'completed')]"/>
+        <filter name="filter_cancelled" string="Cancelled" domain="[('state', '=', 'cancelled')]"/>
+        <separator/>
+        <filter name="filter_today" string="Today" domain="[('create_date', '>=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('create_date', '&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)))]"/>
+        <filter name="filter_this_week" string="This Week" domain="[('create_date', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%Y-%m-%d'))]"/>
+        <group expand="0" string="Group By">
+          <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+          <filter name="group_by_date" string="Date" context="{'group_by': 'create_date:day'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_laundry_pickup_request" model="ir.actions.act_window">
+    <field name="name">Pickup Requests</field>
+    <field name="res_model">laundry.pickup.request</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_laundry_pickup_request_search"/>
+    <field name="context">{
+      'search_default_filter_new': 1,
+    }</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Create your first pickup request!
+      </p>
+      <p>
+        Click the "New" button to create a pickup request.
+      </p>
+    </field>
+  </record>
+
+  <record id="action_laundry_pickup_request_view_list" model="ir.actions.act_window.view">
+    <field name="sequence" eval="1"/>
+    <field name="view_mode">list</field>
+    <field name="view_id" ref="view_laundry_pickup_request_list"/>
+    <field name="act_window_id" ref="action_laundry_pickup_request"/>
+  </record>
+
+  <record id="action_laundry_pickup_request_view_form" model="ir.actions.act_window.view">
+    <field name="sequence" eval="2"/>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_laundry_pickup_request_form"/>
+    <field name="act_window_id" ref="action_laundry_pickup_request"/>
+  </record>
+
+  <menuitem id="laundry_pickup_request_menu"
+            name="Pickup Requests"
+            parent="laundry_management_menu"
+            action="action_laundry_pickup_request" sequence="3"/>
+</odoo>

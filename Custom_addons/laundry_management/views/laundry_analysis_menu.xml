@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Laundry Reporting Menu (Top Level) -->
+    <menuitem id="menu_laundry_analytics_main"
+            parent="laundry_management_menu" 
+              name="Laundry Reporting" 
+              sequence="2"/>
+
+    <!-- Orders Analysis Menu -->
+    <menuitem id="menu_laundry_order_analysis" 
+              name="Orders Analysis" 
+              action="action_laundry_order_analysis" 
+              parent="menu_laundry_analytics_main" 
+              sequence="1"/>
+
+    <!-- Customer Analysis Menu -->
+    <menuitem id="menu_laundry_customer_analysis" 
+              name="Customer Analysis" 
+              action="action_laundry_customer_analysis" 
+              parent="menu_laundry_analytics_main" 
+              sequence="2"/>
+              
+    <!-- Top Customers by Orders Menu -->
+    <menuitem id="menu_laundry_top_customers_by_orders" 
+              name="Top Customers by Orders" 
+              action="action_laundry_top_customers_by_orders" 
+              parent="menu_laundry_analytics_main" 
+              sequence="3"/>
+              
+    <!-- Top Customers by Revenue Menu -->
+    <menuitem id="menu_laundry_top_customers_by_revenue" 
+              name="Top Customers by Revenue" 
+              action="action_laundry_top_customers_by_amount" 
+              parent="menu_laundry_analytics_main" 
+              sequence="4"/>
+</odoo>

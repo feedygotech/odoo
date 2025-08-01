@@ -1,0 +1,12 @@
+<odoo>
+  <template id="pickup_thank_you" name="Pickup Thank You">
+    <t t-call="website.layout">
+      <div class="container mt-5 mb-5">
+        <div class="alert alert-success" role="alert">
+          <h4 class="alert-heading">Thank you!</h4>
+          <p>Your pickup request has been received. We will contact you soon.</p>
+        </div>
+      </div>
+    </t>
+  </template>
+</odoo>

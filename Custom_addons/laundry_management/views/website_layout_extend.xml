@@ -1,0 +1,8 @@
+<odoo>
+  <!-- Extend website layout to include floating pickup widget on all pages -->
+  <template id="website_layout_pickup_widget" inherit_id="website.layout" name="Website Layout with Pickup Widget">
+    <xpath expr="//body" position="inside">
+      <t t-call="laundry_management.pickup_floating_widget"/>
+    </xpath>
+  </template>
+</odoo>

@@ -21,10 +21,9 @@
 ###############################################################################
 from datetime import datetime
 from odoo import api, Command, fields, models, _
+from odoo.exceptions import ValidationError
 import logging
-
 _logger = logging.getLogger(__name__)
-
 
 class LaundryOrder(models.Model):
     """laundry orders generating model"""
@@ -72,9 +71,7 @@ class LaundryOrder(models.Model):
                                 store=True,
                                 help="To get the Total amount")
     currency_id = fields.Many2one("res.currency", string="Currency",
-                                  readonly="state != 'draft'",
-                                  default=lambda self: self.env.company.currency_id,
-                                  help="Currency used for this order")
+                                  help="Name of currency")
     note = fields.Text(string='Terms and conditions',
                        help='Add terms and conditions')
     state = fields.Selection([
@@ -82,19 +79,11 @@ class LaundryOrder(models.Model):
         ('order', 'Laundry Order'),
         ('process', 'Processing'),
         ('done', 'Done'),
-        ('return', 'Returned'),
+        ('delivery', 'Delivered'),
         ('cancel', 'Cancelled'),
     ], string='Status', readonly=True, copy=False, index=True,
-        track_visibility='onchange', default='draft', help="State of the Order")
-    company_id = fields.Many2one('res.company', string='Company',
-                               default=lambda self: self.env.company,
-                               required=True)
-    amount_untaxed = fields.Monetary(string='Untaxed Amount', store=True, 
-                                     compute='_compute_amount', tracking=True)
-    amount_tax = fields.Monetary(string='Taxes', store=True, 
-                                compute='_compute_amount', tracking=True)
-    amount_total = fields.Monetary(string='Total', store=True, 
-                                  compute='_compute_amount', tracking=True)
+        tracking=True, default='draft', help="State of the Order")
+    pos_order_id = fields.Many2one('pos.order', string='POS Order', readonly=True)
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -103,60 +92,49 @@ class LaundryOrder(models.Model):
             vals['name'] = self.env['ir.sequence'].next_by_code('laundry.order')
         return super().create(vals_list)
 
-    # Update the _compute_total_amount method to use the amounts calculated by _compute_amount
-    @api.depends('amount_untaxed', 'amount_tax')
+    @api.depends('order_line_ids')
     def _compute_total_amount(self):
-        """Computing the total of total_amount for compatibility with existing references."""
+        """Computing the total of total_amount in order lines."""
         for order in self:
-            # Use the tax-inclusive amount
-            order.total_amount = order.amount_total
+            order.total_amount = sum(line.amount for line in order.order_line_ids)
 
     def confirm_order(self):
-        """Confirming the order and after confirming order,it will create the washing model"""
+        """Confirming the order and creating work records for each order line."""
         self.state = 'order'
-        product_id = self.env.ref('laundry_management.product_product_laundry_service')
-        
-        # Get all unique tax IDs from order lines
-        tax_ids = []
+        order_lines = []
         for line in self.order_line_ids:
-            for tax in line.tax_id:
-                if tax.id not in tax_ids:
-                    tax_ids.append(tax.id)
-        
-        # Create sale order with tax information
+            order_lines.append(Command.create({
+                'product_id': line.product_id.id,
+                'product_uom_qty': line.qty,
+                'price_unit': line.product_id.list_price,
+            }))
         self.sale_id = self.env['sale.order'].create({
             'partner_id': self.partner_id.id,
             'partner_invoice_id': self.partner_invoice_id.id,
             'partner_shipping_id': self.partner_shipping_id.id,
             'user_id': self.laundry_person_id.id,
-            'order_line': [Command.create({
-                'product_id': product_id.id,
-                'name': 'Laundry Service',
-                'price_unit': self.amount_untaxed,  # Use untaxed amount as base price
-                'tax_id': [(6, 0, tax_ids)] if tax_ids else False,  # Add tax information
-            })]
-        })
-        
-        # Rest of the method remains the same
+            'order_line': order_lines
+             })
+
         for order in self:
             for line in order.order_line_ids:
                 self.env['washing.washing'].create({
-                    'name': line.product_id.name + '-Washing',
-                    'user_id': line.washing_type_id.assigned_person_id.id,
+                    'name': line.product_id.name + ' Work',
                     'description': line.description,
                     'laundry_id': line.id,
+                    'user_id': order.laundry_person_id.id,
                     'state': 'draft',
-                    'washing_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    'washing_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 })
 
     def action_create_invoice(self):
-        """Creating a new invoice for the laundry orders."""
+        """Only create invoice if not already invoiced via POS."""
+        _logger.info("sale")
         if self.sale_id.state in ['draft', 'sent']:
             self.sale_id.action_confirm()
         self.invoice_status = self.sale_id.invoice_status
         return {
             'name': 'Create Invoice',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'sale.advance.payment.inv',
             'type': 'ir.actions.act_window',
@@ -164,9 +142,9 @@ class LaundryOrder(models.Model):
             'target': 'new'
         }
 
-    def action_return_dress(self):
-        """Return dress after laundry"""
-        self.state = 'return'
+    def action_delivery_order(self):
+        """Deliver order after laundry completion"""
+        self.state = 'delivery'
 
     def action_cancel_order(self):
         """Cancel the laundry order"""
@@ -188,35 +166,19 @@ class LaundryOrder(models.Model):
             self.work_count = False
 
     def action_view_laundry_works(self):
-        """Function for viewing the laundry works."""
-        work_obj = self.env['washing.washing'].search(
-            [('laundry_id.laundry_id.id', '=', self.id)])
-        work_ids = []
-        for each in work_obj:
-            work_ids.append(each.id)
-        view_id = self.env.ref('laundry_management.washing_washing_view_form').id
-        if work_ids:
-            if len(work_ids) <= 1:
-                value = {
-                    'view_type': 'form',
-                    'view_mode': 'form',
-                    'res_model': 'washing.washing',
-                    'view_id': view_id,
-                    'type': 'ir.actions.act_window',
-                    'name': _('Works'),
-                    'res_id': work_ids and work_ids[0]
-                }
-            else:
-                value = {
-                    'domain': str([('id', 'in', work_ids)]),
-                    'view_type': 'form',
-                    'view_mode': 'list,form',
-                    'res_model': 'washing.washing',
-                    'view_id': False,
-                    'type': 'ir.actions.act_window',
-                    'name': _('Works'),
-                }
-            return value
+        works = self.env['washing.washing'].search([
+            ('laundry_id.laundry_id.id', '=', self.id)
+        ])
+        action = {
+            'type': 'ir.actions.act_window',
+            'res_model': 'washing.washing',
+            'name': _('Works'),
+        }
+        if len(works) == 1:
+            action.update({'view_mode': 'form', 'res_id': works.id})
+        else:
+            action.update({'view_mode': 'list,form', 'domain': [('id', 'in', works.ids)]})
+        return action
 
     def action_view_invoice(self):
         """Function for viewing Laundry orders invoices."""
@@ -248,47 +210,16 @@ class LaundryOrder(models.Model):
                 }
             return value
 
-    @api.depends('order_line_ids.amount')
-    def _compute_amount(self):
-        """Compute the amounts of the Laundry order."""
-        for order in self:
-            # Use the amounts from the lines which already include tax calculations
-            order_lines = order.order_line_ids
-            
-            # Get the untaxed amounts from each line
-            amount_untaxed = sum(line.amount / (1 + sum(tax.amount / 100 for tax in line.tax_id)) 
-                                 if line.tax_id else line.amount 
-                                 for line in order_lines)
-            
-            # Total is the sum of all line amounts (which already include taxes)
-            amount_total = sum(line.amount for line in order_lines)
-            
-            # Tax is the difference
-            amount_tax = amount_total - amount_untaxed
-            
-            order.update({
-                'amount_untaxed': amount_untaxed,
-                'amount_tax': amount_tax,
-                'amount_total': amount_total,
-            })
-
-
 class LaundryOrderLine(models.Model):
     """Laundry order lines generating model"""
     _name = 'laundry.order.line'
     _description = "Laundry Order Line"
-
-    product_id = fields.Many2one('product.product', string='Dress',
-                                 required=True, help="Name of the product")
-    qty = fields.Integer(string='No of items', required=True,
-                         help="Number of quantity")
-    description = fields.Text(string='Description',
-                              help='Description of the line.')
-    washing_type_id = fields.Many2one('washing.type', string='Washing Type',
-                                      required=True,
-                                      help='Select the type of wash')
-    extra_work_ids = fields.Many2many('washing.work', string='Extra Work',
-                                      help='Add if any extra works')
+    
+    product_id = fields.Many2one('product.product', string='Product', required=True, help="Name of the product")
+    service_id = fields.Many2one('laundry.service', string='Service', help='Laundry service type', readonly=True)
+    qty = fields.Integer(string='Quantity', required=True, help="Number of items")
+    description = fields.Text(string='Description', help='Description of the line.')
+    tax_ids = fields.Many2many('account.tax', string='Taxes', related='product_id.taxes_id', readonly=True)
     amount = fields.Float(compute='_compute_amount', string='Amount',
                           help='Total amount of the line.')
     laundry_id = fields.Many2one('laundry.order', string='Laundry Order',
@@ -296,54 +227,52 @@ class LaundryOrderLine(models.Model):
     state = fields.Selection([
         ('draft', 'Draft'),
         ('wash', 'Washing'),
-        ('extra_work', 'Make Over'),
+        ('process', 'Processing'),
         ('done', 'Done'),
         ('cancel', 'Cancelled'),
-    ], string='Status of the line', readonly=True, copy=False, index=True,
-        default='draft')
-    price_unit = fields.Float(string='Unit Price', digits='Product Price', store=True)
-    tax_id = fields.Many2many('account.tax', string='Taxes')
+    ], string='Status', default='draft', help="State of the Order Line")
 
-    @api.depends('washing_type_id', 'qty', 'price_unit', 'tax_id')
+    @api.depends('product_id', 'qty')
     def _compute_amount(self):
-        """Compute the amount including taxes"""
+        """Compute the total amount"""
         for line in self:
-            # Calculate base price
-            if line.price_unit and line.price_unit > 0:
-                base_price = line.price_unit * line.qty
-            else:
-                base_price = (line.washing_type_id.amount if line.washing_type_id else 0.0) * line.qty
-            
-            # Calculate tax amount
-            tax_amount = 0.0
-            if line.tax_id:
-                for tax in line.tax_id:
-                    if tax.amount_type == 'percent':
-                        tax_amount += base_price * (tax.amount / 100.0)
-            
-            # Set amount INCLUDING tax
-            line.amount = base_price + tax_amount
+            price_unit = line.product_id.list_price or 0.0
+            quantity =  line.qty or 0
+            taxes = line.tax_ids.compute_all(price_unit, quantity=quantity) if line.tax_ids else {'total_included': price_unit * quantity}
+            line.amount = taxes['total_included']
 
-    @api.depends('product_id', 'qty', 'price_unit', 'tax_id')
-    def _compute_amount(self):
-        """Compute the total amount with taxes"""
-        for line in self:
-            # Determine the price to use
-            if line.price_unit and line.price_unit > 0:
-                price_unit = line.price_unit
-            else:
-                price_unit = line.product_id.list_price or (line.washing_type_id.amount if line.washing_type_id else 0.0)
-                
-            quantity = line.qty or 0
-            
-            # Use the tax computation engine
-            if line.tax_id:
-                taxes = line.tax_id.compute_all(
-                    price_unit,
-                    quantity=quantity,
-                    product=line.product_id,
-                    partner=line.laundry_id.partner_id
-                )
-                line.amount = taxes['total_included']
-            else:
-                line.amount = price_unit * quantity
+    @api.onchange('product_id')
+    def _onchange_product_id_set_service(self):
+        if self.product_id and not self.service_id:
+            pos_categories = self.product_id.pos_categ_ids
+            if pos_categories:
+                # Find the top-level parent category
+                top_category = pos_categories[0]
+                while top_category.parent_id:
+                    top_category = top_category.parent_id
+
+                # Search for an existing service
+                    service = self.env['laundry.service'].search([
+                    ('pos_category_id', '=', top_category.id)
+                ], limit=1)
+
+                # If no service exists, create one
+                if not service:
+                    # Also find a matching public category for website sales
+                    public_category = self.env['product.public.category'].search([
+                        ('name', '=', top_category.name)
+                    ], limit=1)
+                    service_vals = {
+                        'name': top_category.name,
+                        'pos_category_id': top_category.id,
+                    }
+                    if public_category:
+                        service_vals['public_categ_id'] = public_category.id
+
+                    service = self.env['laundry.service'].create(service_vals)
+
+                self.service_id = service.id
+
+    def _onchange_product_id_set_taxes(self):
+        if self.product_id:
+            self.tax_ids = self.product_id.taxes_id

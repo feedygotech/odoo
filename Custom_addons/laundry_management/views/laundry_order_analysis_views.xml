@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Laundry Order Analysis Pivot View -->
+    <record id="view_report_laundry_order_pivot" model="ir.ui.view">
+        <field name="name">laundry.order.analysis.pivot</field>
+        <field name="model">laundry.order.analysis</field>
+        <field name="arch" type="xml">
+            <pivot string="Laundry Orders Analysis">
+                <field name="state" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="order_count" type="measure"/>
+                <field name="total_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Laundry Order Analysis Graph View -->
+    <record id="view_report_laundry_order_graph" model="ir.ui.view">
+        <field name="name">laundry.order.analysis.graph</field>
+        <field name="model">laundry.order.analysis</field>
+        <field name="arch" type="xml">
+            <graph string="Laundry Orders Analysis" type="bar">
+                <field name="state"/>
+                <field name="order_count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Order Status Pie Chart View -->
+    <record id="view_report_laundry_order_status_graph" model="ir.ui.view">
+        <field name="name">laundry.order.analysis.status.graph</field>
+        <field name="model">laundry.order.analysis</field>
+        <field name="arch" type="xml">
+            <graph string="Order Status Distribution" type="pie">
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Customer Status Pie Chart View (from Order Analysis) -->
+    <record id="view_report_laundry_customer_status_graph" model="ir.ui.view">
+        <field name="name">laundry.order.analysis.customer.status.graph</field>
+        <field name="model">laundry.order.analysis</field>
+        <field name="arch" type="xml">
+            <graph string="Customer Overview" type="pie">
+                <field name="customer_status"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Top Customers by Orders Graph View -->
+    <record id="view_report_laundry_top_customers_graph" model="ir.ui.view">
+        <field name="name">laundry.order.analysis.top.customers.graph</field>
+        <field name="model">laundry.order.analysis</field>
+        <field name="arch" type="xml">
+            <graph string="Top Customers by Orders" type="bar">
+                <field name="partner_id"/>
+                <field name="customer_order_count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Service Analysis Graph View -->
+    <record id="view_report_laundry_service_graph" model="ir.ui.view">
+        <field name="name">laundry.order.analysis.service.graph</field>
+        <field name="model">laundry.order.analysis</field>
+        <field name="arch" type="xml">
+            <graph string="Service Analysis" type="bar">
+                <field name="service_id"/>
+                <field name="order_count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Laundry Order Analysis List View -->
+    <record id="view_report_laundry_order_list" model="ir.ui.view">
+        <field name="name">laundry.order.analysis.list</field>
+        <field name="model">laundry.order.analysis</field>
+        <field name="arch" type="xml">
+            <list string="Laundry Orders Analysis">
+                <field name="date"/>
+                <field name="order_id" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="customer_status" optional="show"/>
+                <field name="service_id" optional="show"/>
+                <field name="state" optional="show"/>
+                <field name="total_amount" optional="show"/>
+                <field name="customer_order_count" optional="hide"/>
+                <field name="days_since_last_order" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Laundry Order Analysis Search View -->
+    <record id="view_report_laundry_order_search" model="ir.ui.view">
+        <field name="name">laundry.order.analysis.search</field>
+        <field name="model">laundry.order.analysis</field>
+        <field name="arch" type="xml">
+            <search string="Laundry Orders Analysis">
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="service_id"/>
+                <separator/>
+                <filter string="Not Cancelled" name="not_cancelled" domain="[('state','!=','cancel')]"/>
+                <filter string="Active Orders" name="active_orders" domain="[('state','in',['draft','order','process'])]"/>
+                <separator/>
+                <filter string="This Year" name="this_year" domain="[('date','&gt;=',datetime.datetime.now().strftime('%Y-01-01'))]"/>
+                <filter string="This Month" name="this_month" domain="[('date','&gt;=',datetime.datetime.now().strftime('%Y-%m-01'))]"/>
+                <filter string="Last 30 Days" name="last_30_days" domain="[('date','&gt;=',(context_today()-datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Last 90 Days" name="last_90_days" domain="[('date','&gt;=',(context_today()-datetime.timedelta(days=90)).strftime('%Y-%m-%d'))]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Order Status" name="order_status" context="{'group_by':'state'}"/>
+                    <filter string="Customer" name="customer" context="{'group_by':'partner_id'}"/>
+                    <filter string="Service" name="service" context="{'group_by':'service_id'}"/>
+                    <separator/>
+                    <filter string="Order Date" name="order_month" context="{'group_by':'date:month'}"/>
+                    <filter string="Order Week" name="order_week" context="{'group_by':'date:week'}"/>
+                    <filter string="Order Day" name="order_day" context="{'group_by':'date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Main Laundry Orders Analysis Action -->
+    <record id="action_laundry_order_analysis" model="ir.actions.act_window">
+        <field name="name">Orders Analysis</field>
+        <field name="res_model">laundry.order.analysis</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="view_report_laundry_order_graph"/>
+        <field name="search_view_id" ref="view_report_laundry_order_search"/>
+        <field name="context">{'search_default_last_30_days': 1, 'search_default_order_status': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No laundry orders yet!
+            </p><p>
+                Create your first laundry order to see analytics here.
+            </p>
+        </field>
+    </record>
+
+    <!-- Views configuration for main action -->
+    <record id="view_laundry_order_analysis_graph_action" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_report_laundry_order_graph"/>
+        <field name="act_window_id" ref="action_laundry_order_analysis"/>
+    </record>
+    
+    <record id="view_laundry_order_analysis_pivot_action" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="view_report_laundry_order_pivot"/>
+        <field name="act_window_id" ref="action_laundry_order_analysis"/>
+    </record>
+
+    <record id="view_laundry_order_analysis_list_action" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_report_laundry_order_list"/>
+        <field name="act_window_id" ref="action_laundry_order_analysis"/>
+    </record>
+
+    <!-- Customer Status Analysis Action -->
+    <record id="action_report_laundry_customer_status" model="ir.actions.act_window">
+        <field name="name">Customer Status Analysis</field>
+        <field name="res_model">laundry.order.analysis</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="view_report_laundry_customer_status_graph"/>
+        <field name="search_view_id" ref="view_report_laundry_order_search"/>
+        <field name="context">{'group_by':['customer_status']}</field>
+    </record>
+
+    <!-- Top Customers Analysis Action -->
+    <record id="action_report_laundry_top_customers" model="ir.actions.act_window">
+        <field name="name">Top Customers Analysis</field>
+        <field name="res_model">laundry.order.analysis</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="view_report_laundry_top_customers_graph"/>
+        <field name="search_view_id" ref="view_report_laundry_order_search"/>
+        <field name="context">{'group_by':['partner_id'], 'search_default_not_cancelled': 1}</field>
+    </record>
+
+    <!-- Service Analysis Action -->
+    <record id="action_report_laundry_service_analysis" model="ir.actions.act_window">
+        <field name="name">Service Analysis</field>
+        <field name="res_model">laundry.order.analysis</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="view_report_laundry_service_graph"/>
+        <field name="search_view_id" ref="view_report_laundry_order_search"/>
+        <field name="context">{'group_by':['service_id'], 'search_default_not_cancelled': 1}</field>
+    </record>
+
+    <!-- Customer Analysis Views -->
+    <!-- Customer Analysis List View -->
+    <record id="view_laundry_customer_analysis_list" model="ir.ui.view">
+        <field name="name">laundry.customer.analysis.list</field>
+        <field name="model">laundry.customer.analysis</field>
+        <field name="arch" type="xml">
+            <list string="Customer Analysis">
+                <field name="customer_name"/>
+                <field name="customer_status" optional="show"/>
+                <field name="total_orders" optional="show"/>
+                <field name="total_amount" optional="show" sum="Total Revenue"/>
+                <field name="average_order_value" optional="show"/>
+                <field name="last_order_date" optional="show"/>
+                <field name="days_since_last_order" optional="show"/>
+                <field name="first_order_date" optional="hide" string="Customer Since"/>
+                <field name="customer_email" optional="hide"/>
+                <field name="customer_phone" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Customer Analysis Pivot View -->
+    <record id="view_laundry_customer_analysis_pivot" model="ir.ui.view">
+        <field name="name">laundry.customer.analysis.pivot</field>
+        <field name="model">laundry.customer.analysis</field>
+        <field name="arch" type="xml">
+            <pivot string="Customer Analysis">
+                <field name="customer_status" type="row"/>
+                <field name="total_orders" type="measure"/>
+                <field name="total_amount" type="measure"/>
+                <field name="average_order_value" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Customer Analysis Graph View (Pie Chart) -->
+    <record id="view_laundry_customer_analysis_graph" model="ir.ui.view">
+        <field name="name">laundry.customer.analysis.graph</field>
+        <field name="model">laundry.customer.analysis</field>
+        <field name="arch" type="xml">
+            <graph string="Customer Overview" type="pie">
+                <field name="customer_status"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Top Customers by Orders - Bar Chart -->
+    <record id="view_laundry_top_customers_by_orders_graph" model="ir.ui.view">
+        <field name="name">laundry.customer.analysis.top.orders.graph</field>
+        <field name="model">laundry.customer.analysis</field>
+        <field name="arch" type="xml">
+            <graph string="Top 10 Customers by Orders" type="bar">
+                <field name="customer_name"/>
+                <field name="total_orders" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Top Customers by Amount - Bar Chart -->
+    <record id="view_laundry_top_customers_by_amount_graph" model="ir.ui.view">
+        <field name="name">laundry.customer.analysis.top.amount.graph</field>
+        <field name="model">laundry.customer.analysis</field>
+        <field name="arch" type="xml">
+            <graph string="Top 10 Customers by Revenue" type="bar">
+                <field name="customer_name"/>
+                <field name="total_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Customer Analysis Search View -->
+    <record id="view_laundry_customer_analysis_search" model="ir.ui.view">
+        <field name="name">laundry.customer.analysis.search</field>
+        <field name="model">laundry.customer.analysis</field>
+        <field name="arch" type="xml">
+            <search string="Customer Analysis">
+                <field name="customer_name"/>
+                <field name="customer_email"/>
+                <field name="customer_phone"/>
+                <separator/>
+                <filter string="Active Customers" name="active_customers" domain="[('customer_status','=','active')]"/>
+                <filter string="Inactive Customers" name="inactive_customers" domain="[('customer_status','=','inactive')]"/>
+                <filter string="New Customers" name="new_customers" domain="[('customer_status','=','new')]"/>
+                <separator/>
+                <filter string="Recent Activity" name="recent_activity" domain="[('days_since_last_order','&lt;=',30)]"/>
+                <filter string="Long Term Customers" name="long_term" domain="[('total_orders','&gt;=',10)]"/>
+                <separator/>
+                <filter string="This Year" name="this_year" domain="[('first_order_date','&gt;=',datetime.datetime.now().strftime('%Y-01-01'))]"/>
+                <filter string="This Month" name="this_month" domain="[('first_order_date','&gt;=',datetime.datetime.now().strftime('%Y-%m-01'))]"/>
+                <filter string="Last 30 Days" name="last_30_days" domain="[('first_order_date','&gt;=',(context_today()-datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Last 90 Days" name="last_90_days" domain="[('first_order_date','&gt;=',(context_today()-datetime.timedelta(days=90)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter string="Top 10 by Orders" name="top_by_orders" domain="[]" context="{'order': 'total_orders desc', 'limit': 10}"/>
+                <filter string="Top 10 by Amount" name="top_by_amount" domain="[]" context="{'order': 'total_amount desc', 'limit': 10}"/>
+                <group expand="1" string="Group By">
+                    <filter string="Customer Status" name="customer_status" context="{'group_by':'customer_status'}"/>
+                    <filter string="Customer Since" name="first_order_month" context="{'group_by':'first_order_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Top Customers Search View (No default filters or grouping) -->
+    <record id="view_laundry_top_customers_search" model="ir.ui.view">
+        <field name="name">laundry.top.customers.search</field>
+        <field name="model">laundry.customer.analysis</field>
+        <field name="arch" type="xml">
+            <search string="Top Customers">
+                <field name="customer_name"/>
+                <field name="customer_email"/>
+                <field name="customer_phone"/>
+                <separator/>
+                <filter string="Active Customers" name="active_customers" domain="[('customer_status','=','active')]"/>
+                <filter string="Inactive Customers" name="inactive_customers" domain="[('customer_status','=','inactive')]"/>
+                <filter string="New Customers" name="new_customers" domain="[('customer_status','=','new')]"/>
+                <separator/>
+                <filter string="Recent Activity" name="recent_activity" domain="[('days_since_last_order','&lt;=',30)]"/>
+                <filter string="Long Term Customers" name="long_term" domain="[('total_orders','&gt;=',10)]"/>
+                <separator/>
+                <filter string="This Year" name="this_year" domain="[('first_order_date','&gt;=',datetime.datetime.now().strftime('%Y-01-01'))]"/>
+                <filter string="This Month" name="this_month" domain="[('first_order_date','&gt;=',datetime.datetime.now().strftime('%Y-%m-01'))]"/>
+                <filter string="Last 30 Days" name="last_30_days" domain="[('first_order_date','&gt;=',(context_today()-datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Last 90 Days" name="last_90_days" domain="[('first_order_date','&gt;=',(context_today()-datetime.timedelta(days=90)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Customer Status" name="customer_status" context="{'group_by':'customer_status'}"/>
+                    <filter string="Customer Since" name="first_order_month" context="{'group_by':'first_order_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Customer Analysis Action -->
+    <record id="action_laundry_customer_analysis" model="ir.actions.act_window">
+        <field name="name">Customer Analysis</field>
+        <field name="res_model">laundry.customer.analysis</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="view_laundry_customer_analysis_graph"/>
+        <field name="search_view_id" ref="view_laundry_customer_analysis_search"/>
+        <field name="context">{'search_default_active_customers': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No customer data yet!
+            </p><p>
+                Customer analysis will appear here once you have laundry orders.
+            </p>
+        </field>
+    </record>
+
+    <!-- Top Customers by Orders Action -->
+    <record id="action_laundry_top_customers_by_orders" model="ir.actions.act_window">
+        <field name="name">Top Customers by Orders</field>
+        <field name="res_model">laundry.customer.analysis</field>
+        <field name="view_mode">graph,list</field>
+        <field name="view_id" ref="view_laundry_top_customers_by_orders_graph"/>
+        <field name="search_view_id" ref="view_laundry_top_customers_search"/>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="limit">10</field>
+    </record>
+
+    <!-- Top Customers by Revenue Action -->
+    <record id="action_laundry_top_customers_by_amount" model="ir.actions.act_window">
+        <field name="name">Top Customers by Revenue</field>
+        <field name="res_model">laundry.customer.analysis</field>
+        <field name="view_mode">graph,list</field>
+        <field name="view_id" ref="view_laundry_top_customers_by_amount_graph"/>
+        <field name="search_view_id" ref="view_laundry_top_customers_search"/>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="limit">10</field>
+    </record>
+
+</odoo>

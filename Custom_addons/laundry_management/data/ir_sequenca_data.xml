@@ -6,4 +6,18 @@
         <field eval="4" name="padding"/>
         <field name="prefix">LO</field>
     </record>
+    
+    <record id="ir_sequence_contact_query" model="ir.sequence">
+        <field name="name">Contact Query Code</field>
+        <field name="code">laundry.contact.query</field>
+        <field eval="4" name="padding"/>
+        <field name="prefix">CQ</field>
+    </record>
+    
+    <record id="ir_sequence_pickup_request" model="ir.sequence">
+        <field name="name">Pickup Request Code</field>
+        <field name="code">laundry.pickup.request</field>
+        <field eval="4" name="padding"/>
+        <field name="prefix">PR</field>
+    </record>
 </odoo>
