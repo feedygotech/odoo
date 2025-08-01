@@ -19,7 +19,18 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 ###############################################################################
-from . import models
-from . import controllers
-from . import report
+from odoo import fields, models
 
+
+class WashingWork(models.Model):
+    """Model for creating extra work for washing."""
+    _name = 'washing.work'
+    _description = 'Washing Work'
+
+    name = fields.Char(string='Name', required=True)
+    assigned_person_id = fields.Many2one('res.users',
+                                         string='Assigned Person',
+                                         required=True,
+                                         help="Name of assigned person")
+    amount = fields.Float(string='Service Charge', required=True,
+                          help='Service charge for the extra work')

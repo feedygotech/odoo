@@ -108,7 +108,6 @@ class LaundryOrder(models.Model):
                 'product_uom_qty': line.qty,
                 'price_unit': line.product_id.list_price,
             }))
-
         self.sale_id = self.env['sale.order'].create({
             'partner_id': self.partner_id.id,
             'partner_invoice_id': self.partner_invoice_id.id,
@@ -211,12 +210,11 @@ class LaundryOrder(models.Model):
                 }
             return value
 
-
 class LaundryOrderLine(models.Model):
     """Laundry order lines generating model"""
     _name = 'laundry.order.line'
     _description = "Laundry Order Line"
-
+    
     product_id = fields.Many2one('product.product', string='Product', required=True, help="Name of the product")
     service_id = fields.Many2one('laundry.service', string='Service', help='Laundry service type', readonly=True)
     qty = fields.Integer(string='Quantity', required=True, help="Number of items")
@@ -233,8 +231,6 @@ class LaundryOrderLine(models.Model):
         ('done', 'Done'),
         ('cancel', 'Cancelled'),
     ], string='Status', default='draft', help="State of the Order Line")
-
-
 
     @api.depends('product_id', 'qty')
     def _compute_amount(self):
