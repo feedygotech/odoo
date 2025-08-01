@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="laundry_price_snippet" name="Laundry Price Snippet" t-name="laundry_management.laundry_price_snippet">
+    <section class="s_laundry_price_snippet o_colored_level pt32 pb32" data-snippet="laundry_price_snippet" data-name="Price Section" style="min-height: 300px;">
+      <div class="container">
+        <div class="row">
+          <!-- Left: Service Selection Skeleton -->
+          <div class="col-md-4">
+            <div class="service-selection-panel p-4 rounded shadow-sm">
+              <h3 class="text-center fw-bold mb-4">Select Service</h3>
+              <ul class="list-unstyled service-list">
+                <li class="service-item skeleton"></li>
+                <li class="service-item skeleton"></li>
+                <li class="service-item skeleton"></li>
+                <li class="service-item skeleton"></li>
+              </ul>
+            </div>
+          </div>
+          <!-- Right: Pricing Table Skeleton -->
+          <div class="col-md-8">
+            <div class="pricing-details-panel rounded shadow-sm">
+              <div class="pricing-header skeleton mb-3"></div>
+              <table class="table pricing-table mb-0">
+                <tbody>
+                  <tr><td class="skeleton" colspan="3"></td></tr>
+                  <tr><td class="skeleton" colspan="3"></td></tr>
+                  <tr><td class="skeleton" colspan="3"></td></tr>
+                  <tr><td class="skeleton" colspan="3"></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </template>
+</odoo> 

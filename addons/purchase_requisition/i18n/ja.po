@@ -79,7 +79,7 @@ msgstr "要アクション"
 #. module: purchase_requisition
 #: model:ir.model.fields,field_description:purchase_requisition.field_purchase_requisition__active
 msgid "Active"
-msgstr "有効化"
+msgstr "アクティブ"
 
 #. module: purchase_requisition
 #: model:ir.model.fields,field_description:purchase_requisition.field_purchase_requisition__activity_ids
@@ -190,7 +190,7 @@ msgstr "包括オーダ"
 #: model_terms:ir.ui.view,arch_db:purchase_requisition.report_purchaserequisition_document
 #: model_terms:ir.ui.view,arch_db:purchase_requisition.view_purchase_requisition_form
 msgid "Buyer"
-msgstr "購買担当者"
+msgstr "購入者"
 
 #. module: purchase_requisition
 #: model_terms:ir.ui.view,arch_db:purchase_requisition.purchase_requisition_create_alternative_form

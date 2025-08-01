@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Contact Form Snippet Template -->
+    <template id="custom_contact_form_snippet" name="Contact Form Snippet" t-name="laundry_management.custom_contact_form_snippet">
+        <section class="s_contact_form_snippet pt64 pb64"
+                 data-snippet="custom_contact_form_snippet"
+                 data-name="Contact Form"
+                 style="background-color: #f8f9fa;">
+            <div class="container">
+                <div class="row g-4">
+                    <!-- Left Column - Contact Information Cards -->
+                    <div class="col-lg-5 col-md-6">
+                        <div class="h-100 d-flex flex-column justify-content-center">
+                            
+                            <!-- Location Card -->
+                            <div class="card shadow-sm border-0 mb-4" 
+                                 style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px 0px !important; border-radius: 15px;">
+                                <div class="card-body text-center p-4">
+                                    <div class="mb-3">
+                                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle" 
+                                             style="width: 60px; height: 60px; background-color: rgb(28, 62, 94);">
+                                            <i class="fa fa-map-marker text-white" style="font-size: 24px;"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="fw-bold mb-3" style="color: #2c3e50;">Location</h5>
+                                    <p class="text-muted mb-0" style="line-height: 1.6;">
+                                        Warehouse No.6, Near Union Coop Factory, Al Ttay, Al Khawanej 2, Dubai, UAE
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- Email Card -->
+                            <div class="card shadow-sm border-0 mb-4" 
+                                 style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px 0px !important; border-radius: 15px;">
+                                <div class="card-body text-center p-4">
+                                    <div class="mb-3">
+                                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle" 
+                                             style="width: 60px; height: 60px; background-color: rgb(28, 62, 94);">
+                                            <i class="fa fa-envelope text-white" style="font-size: 24px;"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="fw-bold mb-3" style="color: #2c3e50;">Email</h5>
+                                    <p class="text-muted mb-0">info@royalsealaundry.com</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Phone Card -->
+                            <div class="card shadow-sm border-0 mb-4" 
+                                 style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px 0px !important; border-radius: 15px;">
+                                <div class="card-body text-center p-4">
+                                    <div class="mb-3">
+                                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle" 
+                                             style="width: 60px; height: 60px; background-color: rgb(28, 62, 94);">
+                                            <i class="fa fa-phone text-white" style="font-size: 24px;"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="fw-bold mb-3" style="color: #2c3e50;">Call Us</h5>
+                                    <p class="text-muted mb-0">+971 542761538</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Business Hours Card -->
+                            <div class="card shadow-sm border-0" 
+                                 style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px 0px !important; border-radius: 15px;">
+                                <div class="card-body text-center p-4">
+                                    <div class="mb-3">
+                                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle" 
+                                             style="width: 60px; height: 60px; background-color: rgb(28, 62, 94);">
+                                            <i class="fa fa-clock-o text-white" style="font-size: 24px;"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="fw-bold mb-3" style="color: #2c3e50;">Business Hours</h5>
+                                    <p class="text-muted mb-0">Monday - Sunday:<br/>8:00 AM - 10:00 PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column - Contact Form -->
+                    <div class="col-lg-7 col-md-6">
+                        <div class="card shadow border-0 h-100" 
+                             style="box-shadow: rgba(0, 0, 0, 0.1) 0px 8px 24px 0px !important; border-radius: 15px;">
+                            <div class="card-body p-5">
+                                <!-- Header -->
+                                <div class="mb-4">
+                                    <h2 class="fw-bold mb-3" style="color: rgb(28, 62, 94);">
+                                        <i class="fa fa-comments me-2"></i>
+                                        Get in Touch
+                                    </h2>
+                                    <p class="text-muted">Have a question or need assistance? Send us a message and we'll get back to you soon!</p>
+                                </div>
+                                
+                                <!-- Contact Form -->
+                                <form action="/contact/submit" method="post" enctype="multipart/form-data">
+                                    <div class="row">
+                                        
+                                        <!-- Name Field -->
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label fw-semibold" for="contact_name" style="color: #2c3e50;">
+                                                Your Name <span class="text-danger">*</span>
+                                            </label>
+                                            <input class="form-control border-0 shadow-sm" 
+                                                   type="text" 
+                                                   name="name" 
+                                                   required="required" 
+                                                   id="contact_name"
+                                                   placeholder="Enter your full name"
+                                                   style="background-color: #f8f9fa; border-radius: 10px; padding: 12px 16px;"/>
+                                        </div>
+                                        
+                                        <!-- Phone Field -->
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label fw-semibold" for="contact_phone" style="color: #2c3e50;">
+                                                Phone Number <span class="text-danger">*</span>
+                                            </label>
+                                            <input class="form-control border-0 shadow-sm" 
+                                                   type="tel" 
+                                                   name="phone" 
+                                                   required="required" 
+                                                   id="contact_phone"
+                                                   placeholder="Enter your phone number"
+                                                   style="background-color: #f8f9fa; border-radius: 10px; padding: 12px 16px;"/>
+                                        </div>
+                                        
+                                        <!-- Email Field -->
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label fw-semibold" for="contact_email" style="color: #2c3e50;">
+                                                Your Email <span class="text-danger">*</span>
+                                            </label>
+                                            <input class="form-control border-0 shadow-sm" 
+                                                   type="email" 
+                                                   name="email" 
+                                                   required="required" 
+                                                   id="contact_email"
+                                                   placeholder="Enter your email address"
+                                                   style="background-color: #f8f9fa; border-radius: 10px; padding: 12px 16px;"/>
+                                        </div>
+                                        
+                                        <!-- Subject Field -->
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label fw-semibold" for="contact_subject" style="color: #2c3e50;">
+                                                Subject <span class="text-danger">*</span>
+                                            </label>
+                                            <select class="form-control border-0 shadow-sm" 
+                                                    name="subject" 
+                                                    required="required" 
+                                                    id="contact_subject"
+                                                    style="background-color: #f8f9fa; border-radius: 10px; padding: 12px 16px;">
+                                                <option value="">Select a topic...</option>
+                                                <option value="General Inquiry">General Inquiry</option>
+                                                <option value="Service Questions">Service Questions</option>
+                                                <option value="Pricing Information">Pricing Information</option>
+                                                <option value="Support Request">Support Request</option>
+                                                <option value="Complaint">Complaint</option>
+                                                <option value="Feedback">Feedback</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Message Field -->
+                                        <div class="col-12 mb-4">
+                                            <label class="form-label fw-semibold" for="contact_message" style="color: #2c3e50;">
+                                                Message <span class="text-danger">*</span>
+                                            </label>
+                                            <textarea class="form-control border-0 shadow-sm" 
+                                                      rows="5" 
+                                                      name="message" 
+                                                      required="required" 
+                                                      id="contact_message" 
+                                                      placeholder="Tell us how we can help you..."
+                                                      style="background-color: #f8f9fa; border-radius: 10px; padding: 12px 16px; resize: vertical;"></textarea>
+                                        </div>
+                                        
+                                        <!-- Submit Button -->
+                                        <div class="col-12">
+                                            <button type="submit" 
+                                                    class="btn text-white fw-bold w-100 py-3" 
+                                                    style="background-color: rgb(28, 62, 94); border: none; border-radius: 10px; font-size: 16px;">
+                                                <i class="fa fa-paper-plane me-2"></i>
+                                                Send Message
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <!-- Contact Form Response Template -->
+    <template id="contact_form_response" name="Contact Form Response">
+        <t t-call="website.layout">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="s_card card o_colored_level shadow border-0" 
+                             style="--card-img-size-h: 25%; box-shadow: rgba(0, 0, 0, 0.15) 0px 8px 16px 0px !important;">
+                            <div class="card-body text-center p-5">
+                                <t t-if="success">
+                                    <div class="text-success mb-4">
+                                        <span class="fa fa-check-circle" style="font-size: 4rem; color: rgb(28, 62, 94);"/>
+                                    </div>
+                                    <h3 class="fw-bold mb-3" style="color: rgb(28, 62, 94);">Message Sent Successfully!</h3>
+                                    <p class="lead mb-4">
+                                        Thank you, <strong t-esc="customer_name"/>! We have received your message.
+                                    </p>
+                                    <p class="text-muted mb-4">
+                                        Our team will review your inquiry and get back to you within 24 hours.
+                                    </p>
+                                </t>
+                                <t t-else="">
+                                    <div class="text-danger mb-4">
+                                        <span class="fa fa-exclamation-triangle" style="font-size: 4rem; color: #dc3545;"/>
+                                    </div>
+                                    <h3 class="fw-bold text-danger mb-3">Message Not Sent</h3>
+                                    <p class="lead mb-4" t-esc="message"/>
+                                </t>
+                                
+                                <!-- Action Buttons in Card Style -->
+                                <div class="row g-3 justify-content-center">
+                                    <div class="col-auto">
+                                        <div class="card border-0" 
+                                             style="background-color: rgb(28, 62, 94); border-radius: 8px;">
+                                            <div class="p-3">
+                                                <a href="/" class="text-decoration-none">
+                                                    <span class="fa fa-home text-white me-2"/>
+                                                    <span class="text-white fw-semibold">Back to Home</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <t t-if="not success">
+                                        <div class="col-auto">
+                                            <div class="card border-0" 
+                                                 style="background-color: rgb(28, 62, 94); border-radius: 8px;">
+                                                <div class="p-3">
+                                                    <a href="javascript:history.back()" class="text-decoration-none">
+                                                        <span class="fa fa-arrow-left text-white me-2"/>
+                                                        <span class="text-white fw-semibold">Try Again</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

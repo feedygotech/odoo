@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-07 20:37+0000\n"
+"POT-Creation-Date: 2025-06-06 18:38+0000\n"
 "PO-Revision-Date: 2024-09-25 09:41+0000\n"
 "Last-Translator: Wil Odoo, 2025\n"
 "Language-Team: Thai (https://app.transifex.com/odoo/teams/41243/th/)\n"
@@ -935,6 +935,11 @@ msgstr "<span>คำเตือน: คำสั่งนี้อาจซ้�
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
+msgid "<strong class=\"d-block mt-3\">Shipping Address</strong>"
+msgstr ""
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
 #: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_content
 msgid "<strong class=\"mr16\">Subtotal</strong>"
 msgstr "<strong class=\"mr16\">ยอดรวมย่อย</strong>"
@@ -953,11 +958,6 @@ msgstr "<strong>หมายเหตุฐานะทางการเงิ�
 #: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
 msgid "<strong>Salesperson</strong>"
 msgstr ""
-
-#. module: sale
-#: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
-msgid "<strong>Shipping Address</strong>"
-msgstr "<strong>ที่อยู่จัดส่ง</strong>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
@@ -2344,6 +2344,11 @@ msgstr "ลายเซ็นต์อิเล็กทรอนิกส์"
 #: model:ir.model.fields,field_description:sale.field_sale_payment_provider_onboarding_wizard__paypal_email_account
 msgid "Email"
 msgstr "อีเมล"
+
+#. module: sale
+#: model:ir.model,name:sale.model_mail_compose_message
+msgid "Email composition wizard"
+msgstr "ตัวช่วยการเขียนอีเมล"
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_res_config_settings__invoice_mail_template_id
@@ -4471,6 +4476,11 @@ msgid "Salespersons"
 msgstr "พนักงานขาย"
 
 #. module: sale
+#: model:ir.model,name:sale.model_mail_scheduled_message
+msgid "Scheduled Message"
+msgstr "ข้อความที่กำหนดไว้"
+
+#. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.view_sales_order_filter
 #: model_terms:ir.ui.view,arch_db:sale.view_sales_order_line_filter
 msgid "Search Sales Order"
@@ -5522,12 +5532,6 @@ msgstr "ตารางรายการตัวแปร"
 #: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_template
 msgid "View Details"
 msgstr "ดูรายละเอียด"
-
-#. module: sale
-#. odoo-python
-#: code:addons/sale/models/sale_order.py:0
-msgid "View Order"
-msgstr "ดูคำสั่งซื้อ"
 
 #. module: sale
 #. odoo-python

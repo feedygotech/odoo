@@ -428,7 +428,7 @@ msgid ""
 " on variants</span>"
 msgstr ""
 "<span class=\"text-muted\" invisible=\"product_variant_count &lt;= 1\">بناءً"
-" على المتغيران </span>"
+" على المتغيرات</span> "
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.products
@@ -2283,7 +2283,7 @@ msgstr "الشبكة"
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_website__shop_gap
 msgid "Grid-gap on the shop"
-msgstr ""
+msgstr "توجد ثغرة في الشبكة لدى المتجر "
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.sale_report_view_search_website

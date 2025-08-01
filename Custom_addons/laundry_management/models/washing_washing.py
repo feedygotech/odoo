@@ -71,18 +71,6 @@ class WashingWashing(models.Model):
         """Function for set to done."""
         self.state = 'done'
         f = 0
-        if not self.laundry_works:
-            if self.laundry_id.extra_work_ids:
-                for each in self.laundry_id.extra_work_ids:
-                    self.create({'name': each.name,
-                                 'user_id': each.assigned_person_id.id,
-                                 'description': self.laundry_id.description,
-                                 'laundry_id': self.laundry_id.id,
-                                 'state': 'draft',
-                                 'laundry_works': True,
-                                 'washing_date': datetime.now().strftime(
-                                     '%Y-%m-%d %H:%M:%S')})
-                self.laundry_id.state = 'extra_work'
         laundry_id = self.search([('laundry_id.laundry_id', '=',
                                    self.laundry_id.laundry_id.id)])
         for each in laundry_id:

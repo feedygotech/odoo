@@ -292,7 +292,7 @@ msgstr "リモートワークを有効化して、従業員の勤務場所を指
 #: model:ir.model.fields,field_description:hr.field_hr_job__active
 #: model:ir.model.fields,field_description:hr.field_hr_work_location__active
 msgid "Active"
-msgstr "有効化"
+msgstr "アクティブ"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_department__activity_ids
@@ -2240,7 +2240,7 @@ msgstr "タグが見つかりません！作成しましょう。"
 #: model_terms:hr.job,website_description:hr.job_marketing
 #: model_terms:hr.job,website_description:hr.job_trainee
 msgid "No dumb managers, no stupid tools to use, no rigid working hours"
-msgstr "愚かなマネージャーはいませんし、お馬鹿なツールは使いませんし、労働時間の強制拘束もありません"
+msgstr "自由でフラットな職場環境、使いやすいツール、柔軟な勤務時間"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_ceo

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-07 20:36+0000\n"
+"POT-Creation-Date: 2025-06-06 18:37+0000\n"
 "PO-Revision-Date: 2024-09-25 09:41+0000\n"
 "Last-Translator: Maitê Dietze, 2025\n"
 "Language-Team: Portuguese (Brazil) (https://app.transifex.com/odoo/teams/41243/pt_BR/)\n"
@@ -210,6 +210,18 @@ msgstr "%(ref)s (%(currency_amount)s)"
 #: code:addons/account/models/account_account_tag.py:0
 msgid "%(tag)s (%(country_code)s)"
 msgstr "%(tag)s (%(country_code)s)"
+
+#. module: account
+#. odoo-python
+#: code:addons/account/models/account_tax.py:0
+msgid ""
+"%(tax_account)s (%(account_name)s) should be an account of type "
+"\"%(receivable)s\" or \"%(payable)s\" with both options "
+"\"%(allow_reconciliation)s\" and \"%(non_trade)s\" enabled."
+msgstr ""
+"%(tax_account)s (%(account_name)s) should be an account of type "
+"\"%(receivable)s\" or \"%(payable)s\" with both options "
+"\"%(allow_reconciliation)s\" and \"%(non_trade)s\" enabled."
 
 #. module: account
 #. odoo-python
@@ -1366,6 +1378,11 @@ msgstr "<span>Aviso: este documento parece uma duplicata de</span>"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+msgid "<strong class=\"d-block mt-3\">Shipping Address</strong>"
+msgstr "<strong class=\"d-block mt-3\">Shipping Address</strong>"
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
 msgid "<strong class=\"mr16\">Subtotal</strong>"
 msgstr "<strong class=\"mr16\">Subtotal</strong>"
 
@@ -1431,11 +1448,6 @@ msgstr "<strong>Referência</strong>"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.report_invoice_document
-msgid "<strong>Shipping Address</strong>"
-msgstr "<strong>Endereço de entrega</strong>"
-
-#. module: account
-#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
 msgid "<strong>Source</strong>"
 msgstr "<strong>Origem</strong>"
 
@@ -1469,6 +1481,15 @@ msgstr "<strong>Total</strong>"
 #: model_terms:ir.ui.view,arch_db:account.view_account_account_kanban
 msgid "<strong>Type: </strong>"
 msgstr "<strong>Tipo: </strong>"
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
+msgid ""
+"<strong>Warning:</strong> Once the Audit Trail is enabled, it cannot be "
+"disabled again if there are any existing journal items."
+msgstr ""
+"<strong>Warning:</strong> Once the Audit Trail is enabled, it cannot be "
+"disabled again if there are any existing journal items."
 
 #. module: account
 #. odoo-python
@@ -1506,6 +1527,16 @@ msgstr ""
 #: code:addons/account/models/res_partner_bank.py:0
 msgid "A bank account can belong to only one journal."
 msgstr "Uma conta bancária pode pertencer a apenas um diário."
+
+#. module: account
+#. odoo-python
+#: code:addons/account/models/res_partner_bank.py:0
+msgid ""
+"A bank account with Account Number %(number)s already exists for Partner "
+"%(partner)s, but is archived. Please unarchive it instead."
+msgstr ""
+"A bank account with Account Number %(number)s already exists for Partner "
+"%(partner)s, but is archived. Please unarchive it instead."
 
 #. module: account
 #: model_terms:ir.actions.act_window,help:account.action_bank_statement_tree
@@ -3515,8 +3546,8 @@ msgstr "Conta bancária"
 #. module: account
 #. odoo-python
 #: code:addons/account/models/res_partner_bank.py:0
-msgid "Bank Account %(link)s with number %(number)s deleted"
-msgstr "Conta bancária %(link)s com número %(number)s excluído"
+msgid "Bank Account %(link)s with number %(number)s archived"
+msgstr "Bank Account %(link)s with number %(number)s archived"
 
 #. module: account
 #. odoo-python
@@ -4123,6 +4154,12 @@ msgid ""
 msgstr ""
 "Não é possível obter informações de agregação de uma linha que não está "
 "usando o mecanismo de 'agregação'"
+
+#. module: account
+#. odoo-python
+#: code:addons/account/models/account_move_send.py:0
+msgid "Cannot identify the invoices in the generated PDF: %s"
+msgstr "Cannot identify the invoices in the generated PDF: %s"
 
 #. module: account
 #: model:account.account,name:account.1_capital
@@ -15445,6 +15482,14 @@ msgstr ""
 "implementada"
 
 #. module: account
+#. odoo-python
+#: code:addons/account/models/partner.py:0
+msgid ""
+"The commercial partner has been updated for all related accounting entries."
+msgstr ""
+"The commercial partner has been updated for all related accounting entries."
+
+#. module: account
 #: model:ir.model.fields,help:account.field_account_tax_repartition_line__company_id
 msgid "The company this distribution line belongs to."
 msgstr "A empresa à qual esta linha de distribuição pertence."
@@ -18073,6 +18118,11 @@ msgid "Wrong credit or debit value in accounting entry!"
 msgstr "Valor incorreto de crédito ou débito no lançamento contábil."
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.view_partner_property_form
+msgid "XML format"
+msgstr "XML format"
+
+#. module: account
 #: model:ir.model.fields.selection,name:account.selection__account_move__auto_post__yearly
 msgid "Yearly"
 msgstr "Anualmente"
@@ -18747,6 +18797,16 @@ msgid ""
 msgstr ""
 "Não é possível definir uma moeda nesta conta pois já existem alguns "
 "lançamentos de diário com uma moeda estrangeira diferente."
+
+#. module: account
+#. odoo-python
+#: code:addons/account/models/partner.py:0
+msgid ""
+"You cannot set a partner as an invoicing address of another if they have a "
+"different %(vat_label)s."
+msgstr ""
+"You cannot set a partner as an invoicing address of another if they have a "
+"different %(vat_label)s."
 
 #. module: account
 #. odoo-python

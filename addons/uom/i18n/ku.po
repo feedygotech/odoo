@@ -38,7 +38,7 @@ msgstr ""
 #. module: uom
 #: model:ir.model.fields,field_description:uom.field_uom_uom__active
 msgid "Active"
-msgstr ""
+msgstr "چالاک"
 
 #. module: uom
 #: model_terms:ir.actions.act_window,help:uom.product_uom_form_action
@@ -53,7 +53,7 @@ msgstr ""
 #. module: uom
 #: model_terms:ir.ui.view,arch_db:uom.uom_uom_view_search
 msgid "Archived"
-msgstr ""
+msgstr "ئەرشیف کراوە"
 
 #. module: uom
 #: model:ir.model.fields,field_description:uom.field_uom_uom__factor_inv
@@ -146,19 +146,19 @@ msgstr ""
 #: model:ir.model.fields,field_description:uom.field_uom_category__id
 #: model:ir.model.fields,field_description:uom.field_uom_uom__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: uom
 #: model:ir.model.fields,field_description:uom.field_uom_category__write_uid
 #: model:ir.model.fields,field_description:uom.field_uom_uom__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "دوایین نوێکردنەوە لەلایەن..."
 
 #. module: uom
 #: model:ir.model.fields,field_description:uom.field_uom_category__write_date
 #: model:ir.model.fields,field_description:uom.field_uom_uom__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "دوایین نوێکردنەوە لە..."
 
 #. module: uom
 #: model:uom.category,name:uom.uom_categ_length
@@ -173,7 +173,7 @@ msgstr ""
 #. module: uom
 #: model:ir.model,name:uom.model_uom_uom
 msgid "Product Unit of Measure"
-msgstr ""
+msgstr "یەکەی پێوانەکردنی بەرهەم"
 
 #. module: uom
 #: model:ir.model,name:uom.model_uom_category
@@ -283,7 +283,7 @@ msgstr ""
 #. module: uom
 #: model:ir.model.fields,field_description:uom.field_uom_uom__uom_type
 msgid "Type"
-msgstr ""
+msgstr "جۆر"
 
 #. module: uom
 #: model:ir.model.fields,help:uom.field_uom_uom__active
@@ -299,7 +299,7 @@ msgstr ""
 #. module: uom
 #: model:ir.model.fields,field_description:uom.field_uom_uom__name
 msgid "Unit of Measure"
-msgstr ""
+msgstr "یەکەی پێوانەی"
 
 #. module: uom
 #: model:ir.model.fields,field_description:uom.field_uom_category__name
@@ -317,7 +317,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:uom.product_uom_form_view
 #: model_terms:ir.ui.view,arch_db:uom.product_uom_tree_view
 msgid "Units of Measure"
-msgstr ""
+msgstr "یەکەی پێوانەی"
 
 #. module: uom
 #: model:ir.actions.act_window,name:uom.product_uom_categ_form_action
@@ -371,7 +371,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/uom/models/uom_uom.py:0
 msgid "Warning for %s"
-msgstr ""
+msgstr "ئاگاداری بۆ %s"
 
 #. module: uom
 #: model:uom.category,name:uom.product_uom_categ_kgm

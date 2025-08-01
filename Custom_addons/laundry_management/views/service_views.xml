@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Form View -->
+    <record id="laundry_service_form_view" model="ir.ui.view">
+        <field name="name">laundry.service.view.form</field>
+        <field name="model">laundry.service</field>
+        <field name="arch" type="xml">
+            <form string="Laundry Service">
+                <sheet>
+                    <field name="image" widget="image" nolabel="1" style="max-width: 96px; max-height: 96px; box-shadow: 0 2px 8px #ccc; margin-bottom: 8px; float:right;"/>
+                    <div class="oe_title">
+                        <label for="name" string="Service Name"/>
+                        <h1>
+                            <field name="name" placeholder="Service Name" class="oe_inline w-100" widget="text" options="{'line_breaks': False}"/>
+                        </h1>
+                        <field name="tagline" placeholder="Catchy tagline for this service..." class="o_text_overflow" style="font-style: italic; color: #666; margin-top: 4px;"/>
+                    </div>
+                    <group col="2">
+                        <group string="Basic Information">
+                            <field name="overview" placeholder="Brief summary of what this service includes..." widget="text"/>
+                            <field name="pos_category_id" domain="[('parent_id','=',False)]" options="{'no_create': False}" required="1" help="Category used for Point of Sale system"/>
+                        </group>
+                        <group string="Website &amp; Publishing">
+                            <field name="public_categ_id" string="Website Category" domain="[('parent_id','=',False)]" options="{'no_create': False}" help="Category for website display and online orders"/>
+                            <field name="is_published" string="Published on Website" widget="boolean_toggle" help="Make this service visible to customers on the website"/>
+                        </group>
+                        <group string="Status">
+                            <field name="active" help="Uncheck to temporarily disable this service"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <div class="alert alert-info" role="alert">
+                                <strong>Service Description:</strong> Provide a detailed description of this service. 
+                                This information will be displayed to customers and help them understand what's included.
+                            </div>
+                            <field name="description" placeholder="Write a detailed description of the service, including what's included, process, timeframes, special care instructions, etc..." nolabel="1"/>
+                        </page>
+                        <page string="Features">
+                            <div class="alert alert-info" role="alert">
+                                <strong>Service Features:</strong> Define key features that distinguish this service. 
+                                Use the handle (≡) to reorder features as they will appear to customers.
+                            </div>
+                            <field name="feature_ids" nolabel="1">
+                                <list editable="bottom" create="true" delete="true">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name" string="Feature Name" placeholder="e.g., Same Day Service, Eco-Friendly, Professional Care" required="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Benefits">
+                            <div class="alert alert-info" role="alert">
+                                <strong>Service Benefits:</strong> Define the value proposition for customers. 
+                                Each benefit should include a clear title and detailed explanation.
+                            </div>
+                            <field name="benefit_ids" nolabel="1">
+                                <list editable="bottom" create="true" delete="true">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name" string="Benefit Title" placeholder="e.g., Save Time, Professional Results, Convenience" required="1"/>
+                                    <field name="description" string="Description" placeholder="Explain how this benefit helps the customer..." widget="text"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Pricing Control">
+                            <div class="alert alert-info" role="alert">
+                                <strong><i class="fa fa-info-circle me-2"></i>Pricing Publication Management</strong><br/>
+                                Control pricing visibility to customers through your website. 
+                                Review and publish changes to maintain accurate pricing information.
+                            </div>
+                            
+                            <!-- Publication Status Card -->
+                            <div class="card mb-4 border-0 shadow-sm">
+                                <div class="card-header" style="background: linear-gradient(135deg, #f8f9fa, #ffffff); border-bottom: 2px solid #e9ecef;">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fa fa-dashboard text-primary me-2 fa-lg"></i>
+                                        <h5 class="card-title mb-0 text-primary">Publication Dashboard</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <!-- Status Badge -->
+                                            <div class="d-flex align-items-center mb-4">
+                                                <span class="badge badge-pill px-3 py-2 fs-6" 
+                                                      invisible="not is_pricing_published"
+                                                      style="background: linear-gradient(135deg, #28a745, #20c997); color: white; border-radius: 20px;">
+                                                    <i class="fa fa-globe me-2"></i>LIVE ON WEBSITE
+                                                </span>
+                                                <span class="badge badge-pill px-3 py-2 fs-6" 
+                                                      invisible="is_pricing_published"
+                                                      style="background: linear-gradient(135deg, #6c757d, #8d9498); color: white; border-radius: 20px;">
+                                                    <i class="fa fa-eye-slash me-2"></i>NOT PUBLISHED
+                                                </span>
+                                            </div>
+                                            
+                                            <!-- Status Details -->
+                                            <div class="row g-3">
+                                                <div class="col-12">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fa fa-calendar text-muted me-2"></i>
+                                                        <small class="text-muted me-2">Last Updated:</small>
+                                                        <field name="pricing_last_updated" readonly="1" nolabel="1" 
+                                                               widget="datetime" options="{'format': 'MMM d, yyyy HH:mm'}"
+                                                               class="fw-bold"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="d-grid gap-2">
+                                                <!-- Preview Button - Always Available -->
+                                                <button name="action_preview_pricing" type="object" 
+                                                        string="Preview" 
+                                                        class="btn btn-outline-primary btn-lg" 
+                                                        icon="fa-eye"
+                                                        help="Preview customer view before publishing"/>
+                                                
+                                                <!-- Conditional Action Buttons -->
+                                                <div class="btn-group-vertical gap-2" role="group">
+                                                    <!-- Initial Publish Button -->
+                                                    <button name="action_publish_pricing" type="object" 
+                                                            string="Publish" 
+                                                            class="btn btn-success btn-lg" 
+                                                            icon="fa-globe"
+                                                            invisible="is_pricing_published"
+                                                            help="Make pricing visible to customers"/>
+                                                    
+                                                    <!-- Republish Button (when changes exist) -->
+                                                    <button name="action_publish_pricing" type="object" 
+                                                            string="Republish" 
+                                                            class="btn btn-warning btn-lg mb-2" 
+                                                            icon="fa-sync-alt"
+                                                            invisible="not is_pricing_published or not pricing_pending_changes"
+                                                            help="Update published pricing with latest changes"/>
+                                                    
+                                                    <!-- Unpublish Button -->
+                                                    <button name="action_unpublish_pricing" type="object" 
+                                                            string="Unpublish" 
+                                                            class="btn btn-outline-secondary btn-lg" 
+                                                            icon="fa-eye-slash"
+                                                            invisible="not is_pricing_published"
+                                                            help="Remove pricing from customer view"
+                                                            confirm="Are you sure you want to unpublish this pricing?"/>
+                                                </div>
+                                                
+                                                <!-- Status Indicator -->
+                                                <div class="mt-3 p-3 rounded" 
+                                                     style="background: linear-gradient(135deg, #e8f5e8, #f0f8f0); border-left: 4px solid #28a745;"
+                                                     invisible="not is_pricing_published and not pricing_pending_changes">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fa fa-info-circle text-success me-2"></i>
+                                                        <small class="text-muted">
+                                                            <span invisible="not is_pricing_published">Pricing is live and visible to customers</span>
+                                                            <span invisible="is_pricing_published or not pricing_pending_changes">Ready to publish pricing information</span>
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Pending Changes Alert -->
+                            <div class="alert alert-warning border-0 shadow-sm" role="alert" invisible="not pricing_pending_changes"
+                                 style="background: linear-gradient(135deg, #fff3cd, #fefefe); border-left: 4px solid #ffc107 !important;">
+                                <div class="d-flex align-items-start">
+                                    <div class="flex-shrink-0">
+                                        <i class="fa fa-exclamation-triangle text-warning fa-2x"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="alert-heading mb-2 text-warning">
+                                            <i class="fa fa-clock me-1"></i>Pending Changes Detected
+                                        </h6>
+                                        <p class="mb-2 text-dark">
+                                            Pricing has been updated since last publication. 
+                                            Changes are not visible to customers yet.
+                                        </p>
+                                        <small class="text-muted">
+                                            <i class="fa fa-lightbulb me-1"></i>
+                                            <strong>Tip:</strong> Use "Preview Customer View" to review changes before publishing.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Pricing Snapshots Details -->
+                            <div class="mt-4" invisible="not pricing_snapshot_ids">
+                                <separator string="Publication History &amp; Changes"/>
+                                <field name="pricing_snapshot_ids" readonly="1">
+                                    <list decoration-warning="has_changes" decoration-muted="not has_changes">
+                                        <field name="category_name" string="Category"/>
+                                        <field name="product_name" string="Published Name"/>
+                                        <field name="current_name" string="Current Name"/>
+                                        <field name="currency_id" column_invisible="True"/>
+                                        <field name="published_price" string="Published Price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="current_price" string="Current Price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="snapshot_date" string="Last Published"/>
+                                        <field name="price_changed" column_invisible="True"/>
+                                        <field name="name_changed" column_invisible="True"/>
+                                        <field name="has_changes" column_invisible="True"/>
+                                    </list>
+                                </field>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="laundry_service_list_view" model="ir.ui.view">
+        <field name="name">laundry.service.view.list</field>
+        <field name="model">laundry.service</field>
+        <field name="arch" type="xml">
+            <list string="Laundry Services" decoration-info="not name">
+                <field name="name"/>
+                <field name="tagline"/>
+                <field name="overview"/>
+                <field name="is_published"/>
+                <field name="pos_category_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="laundry_service_search_view" model="ir.ui.view">
+        <field name="name">laundry.service.view.search</field>
+        <field name="model">laundry.service</field>
+        <field name="arch" type="xml">
+            <search string="Search Laundry Services">
+                <field name="name"/>
+                <field name="overview"/>
+                <field name="description"/>
+                <field name="pos_category_id"/>
+                <field name="public_categ_id"/>
+                <filter string="Published Services" name="published" domain="[('is_published', '=', True)]"/>
+                <filter string="Unpublished Services" name="unpublished" domain="[('is_published', '=', False)]"/>
+                <filter string="Services with Image" name="with_image" domain="[('image', '!=', False)]"/>
+                <filter string="Services without Image" name="without_image" domain="[('image', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Name" name="group_name" context="{'group_by': 'name'}"/>
+                    <filter string="POS Category" name="group_pos_category" context="{'group_by': 'pos_category_id'}"/>
+                    <filter string="Website Category" name="group_public_category" context="{'group_by': 'public_categ_id'}"/>
+                    <filter string="Published Status" name="group_published" context="{'group_by': 'is_published'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="laundry_service_kanban_view" model="ir.ui.view">
+        <field name="name">laundry.service.view.kanban</field>
+        <field name="model">laundry.service</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column" sample="1">
+                <field name="name"/>
+                <field name="tagline"/>
+                <field name="overview"/>
+                <field name="image"/>
+                <field name="is_published"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #e0e0e0; padding: 18px 12px 12px 12px; margin: 8px; min-height: 220px; display: flex; flex-direction: column; align-items: center;">
+                            <div style="margin-bottom: 12px;">
+                                <img t-if="record.image.raw_value" t-att-src="kanban_image('laundry.service', 'image', record.id.raw_value)" alt="Service Image" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; box-shadow: 0 1px 4px #bbb;"/>
+                                <div t-else="" style="width: 72px; height: 72px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px #bbb;">
+                                    <i class="fa fa-image fa-2x" style="color: #ccc;"/>
+                                </div>
+                            </div>
+                            <div style="text-align: center; width: 100%; flex: 1; display: flex; flex-direction: column;">
+                                <div style="flex-grow: 0;">
+                                    <strong style="font-size: 1.1em; color: #333;"><field name="name"/></strong>
+                                    <div t-if="record.tagline.raw_value" style="margin: 4px 0; color: #888; font-size: 0.9em; font-style: italic;">
+                                        <field name="tagline"/>
+                                    </div>
+                                </div>
+                                <div style="flex: 1; display: flex; align-items: flex-start; margin: 6px 0;">
+                                    <div style="color: #666; font-size: 0.95em; width: 100%;">
+                                        <span t-if="record.overview.raw_value"><field name="overview"/></span>
+                                        <span t-else="" class="text-muted">No overview available</span>
+                                    </div>
+                                </div>
+                                <div style="flex-grow: 0; margin-top: auto;">
+                                    <span t-if="record.is_published.raw_value" class="badge badge-success" style="font-size: 0.9em; padding: 4px 12px; border-radius: 8px;">
+                                        <i class="fa fa-globe"/> Published
+                                    </span>
+                                    <span t-else="" class="badge badge-secondary" style="font-size: 0.9em; padding: 4px 12px; border-radius: 8px;">
+                                        <i class="fa fa-eye-slash"/> Draft
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="laundry_service_action" model="ir.actions.act_window">
+        <field name="name">Laundry Services</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">laundry.service</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="laundry_service_search_view"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first service
+            </p>
+            <p>
+                Define and organize your laundry services with complete control over pricing, 
+                descriptions, and customer visibility. Build a comprehensive service catalog 
+                that drives customer engagement and streamlines operations.
+            </p>
+            <p>
+                Services can include detailed descriptions, key features, customer benefits, 
+                and advanced pricing publication controls to ensure professional service delivery.
+            </p>
+        </field>
+    </record>
+
+    <!-- Defined menus -->
+    <menuitem id="laundry_config_menu" name="Configuration" parent="laundry_management_menu" sequence="4"/>
+    <menuitem id="laundry_customer" name="Customers" parent="laundry_config_menu" action="base.action_partner_customer_form" sequence="1"/>
+    <menuitem id="laundry_products" name="Products" parent="laundry_config_menu" action="product.product_normal_action_sell" sequence="2"/>
+    <menuitem id="laundry_service_menu" name="Services" parent="laundry_config_menu" action="laundry_service_action" sequence="3"/>
+</odoo> 

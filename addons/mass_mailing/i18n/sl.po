@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 13:22+0000\n"
+"POT-Creation-Date: 2025-05-14 20:47+0000\n"
 "PO-Revision-Date: 2024-09-25 09:41+0000\n"
 "Last-Translator: Aleš Pipan, 2025\n"
 "Language-Team: Slovenian (https://app.transifex.com/odoo/teams/41243/sl/)\n"
@@ -2135,6 +2135,7 @@ msgstr ""
 #: code:addons/mass_mailing/models/mailing.py:0
 msgid "File size exceeds configured maximum (%s bytes)"
 msgstr ""
+"Velikost datoteke presega nastavljeno največjo možno velikost (%s bajtov)"
 
 #. module: mass_mailing
 #: model:ir.model.fields,field_description:mass_mailing.field_mailing_filter__mailing_domain
@@ -2441,6 +2442,8 @@ msgstr "Slika Besedilo Slika"
 msgid ""
 "Image size excessive, imported images must be smaller than 42 million pixel"
 msgstr ""
+"Prevelika velikost slike, uvožene slike morajo biti manjše od 42 milijonov "
+"slikovnih pik"
 
 #. module: mass_mailing
 #: model_terms:ir.ui.view,arch_db:mass_mailing.s_masonry_block_options
@@ -2458,7 +2461,7 @@ msgstr "Uvozi"
 #: model_terms:ir.ui.view,arch_db:mass_mailing.mailing_list_view_form
 #: model_terms:ir.ui.view,arch_db:mass_mailing.mailing_list_view_kanban
 msgid "Import Contacts"
-msgstr ""
+msgstr "Uvozi stike"
 
 #. module: mass_mailing
 #. odoo-python
@@ -4199,6 +4202,11 @@ msgstr ""
 #. module: mass_mailing
 #: model_terms:ir.ui.view,arch_db:mass_mailing.view_mail_mass_mailing_test_form
 msgid "Send test"
+msgstr ""
+
+#. module: mass_mailing
+#: model_terms:ir.ui.view,arch_db:mass_mailing.view_mail_mass_mailing_form
+msgid "Send to all"
 msgstr ""
 
 #. module: mass_mailing

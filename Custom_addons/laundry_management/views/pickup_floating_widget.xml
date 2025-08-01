@@ -1,0 +1,378 @@
+<odoo>
+  <!-- Floating Pickup Request Widget Template -->
+  <template id="pickup_floating_widget" name="Floating Pickup Request Widget">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+    
+    <!-- Floating Button with Animation -->
+    <div id="pickup-floating-widget">
+      <style>
+        @keyframes bouncePickup {
+          0%, 20%, 53%, 80%, 100% {
+            transform: translate3d(0, 0, 0);
+          }
+          40%, 43% {
+            transform: translate3d(0, -20px, 0);
+          }
+          70% {
+            transform: translate3d(0, -10px, 0);
+          }
+          90% {
+            transform: translate3d(0, -5px, 0);
+          }
+        }
+
+        #pickup-floating-btn {
+          position: fixed;
+          bottom: 160px;
+          right: 30px;
+          z-index: 1050;
+          background-color: white;
+          border-radius: 50%;
+          width: 115px;
+          height: 115px;
+          box-shadow: 0 0 15px rgba(13, 202, 240, 0.7);
+          transition: all 0.3s ease;
+          transform-origin: center center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+          cursor: pointer;
+          animation: bouncePickup 2s infinite;
+        }
+
+        #pickup-floating-btn:hover {
+          transform: scale(1.1);
+          box-shadow: 0 0 25px rgba(13, 202, 240, 0.9);
+        }
+
+        #pickup-floating-btn .pickup-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          font-weight: bold;
+          color: #175AA9;
+          text-align: center;
+        }
+
+        #pickup-floating-btn .pickup-image {
+          width: 60px;
+          height: 60px;
+        }
+
+        #pickup-floating-btn .pickup-icon {
+          font-size: 3rem;
+          color: #175AA9;
+          margin-bottom: 5px;
+        }
+
+        #pickup-floating-btn p {
+          font-size: 1rem;
+          margin: 0;
+          margin-top: -5px;
+        }
+
+        /* Modal customizations */
+        .pickup-modal-header {
+          background-color: #e6f0ff;
+          border-bottom: 1px solid #dee2e6;
+        }
+
+        .pickup-form-label {
+          text-align: left;
+          font-weight: bold;
+          color: #333;
+        }
+
+        .pickup-location-btn {
+          border: 1px solid #175AA9;
+          padding: 0.5rem;
+          background-color: #e6f2ff;
+          color: #175AA9;
+          transition: all 0.3s ease;
+        }
+
+        .pickup-location-btn:hover {
+          background-color: #175AA9;
+          color: white;
+        }
+
+        @media (max-width: 768px) {
+          #pickup-floating-btn {
+            width: 80px;
+            height: 80px;
+            bottom: 100px;
+            right: 20px;
+          }
+          
+          #pickup-floating-btn .pickup-image {
+            width: 35px;
+            height: 30px;
+          }
+          
+          #pickup-floating-btn p {
+            font-size: 0.8rem;
+          }
+        }
+      </style>
+
+      <!-- Floating Button -->
+      <button type="button" id="pickup-floating-btn" data-bs-toggle="modal" data-bs-target="#pickupRequestModal">
+        <div class="pickup-content">
+          <img src="/laundry_management/static/description/pickup.png" alt="Pickup" class="pickup-image" loading="lazy"/>
+          <p>Request Pickup</p>
+        </div>
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="pickupRequestModal" tabindex="-1" aria-labelledby="pickupModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header pickup-modal-header">
+              <h5 class="modal-title" id="pickupModalLabel">🚚 Request a Pickup</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body px-4 py-4">
+              <form id="pickup-form" method="POST" action="/pickup/submit">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                
+                <div class="mb-3">
+                  <label class="form-label pickup-form-label">Your Name</label>
+                  <input type="text" class="form-control" name="name" placeholder="Enter your full name" required=""/>
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label pickup-form-label">Your Email</label>
+                  <input type="email" class="form-control" name="mail" placeholder="Enter your email address" required=""/>
+                </div>
+                
+                <div class="mb-2">
+                  <label class="form-label pickup-form-label">Pickup Address</label>
+                </div>
+                <div class="mb-3">
+                  <button type="button" id="useCurrentLocationBtn" class="btn pickup-location-btn w-100 mb-3">
+                    <i class="bi bi-geo-alt-fill me-2"></i>Use Current Location
+                  </button>
+                  <div id="locationMessage" class="alert" style="display: none; padding: 8px; margin-bottom: 10px; border-radius: 5px;"></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label pickup-form-label">Street Address <span style="color:red">*</span></label>
+                    <input type="text" class="form-control" id="pickupStreet" name="pickup_street" placeholder="Street address" required="" />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label pickup-form-label">City <span style="color:red">*</span></label>
+                    <input type="text" class="form-control" id="pickupCity" name="pickup_city" placeholder="City" required="" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label pickup-form-label">State <span style="color:red">*</span></label>
+                    <input type="text" class="form-control" id="pickupState" name="pickup_state" placeholder="State" required="" />
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label class="form-label pickup-form-label">Zip Code <span style="color:red">*</span></label>
+                    <input type="text" class="form-control" id="pickupZip" name="pickup_zip" placeholder="Zip code" required="" />
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label class="form-label pickup-form-label">Country <span style="color:red">*</span></label>
+                    <input type="text" class="form-control" id="pickupCountry" name="pickup_country" placeholder="Country" required="" />
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label pickup-form-label">Landmark (Optional)</label>
+                  <input type="text" class="form-control" name="address" placeholder="e.g., near AB School"/>
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label pickup-form-label">Phone Number</label>
+                  <input type="tel" class="form-control" name="phone" placeholder="Enter your phone number" required=""/>
+                </div>
+                
+                <p class="text-muted small">
+                  <i class="bi bi-info-circle me-1"></i>Our staff will call you to discuss your laundry requirements and schedule pickup.
+                </p>
+              </form>
+            </div>
+
+            <div class="modal-footer">
+              <button type="submit" form="pickup-form" class="btn btn-success">
+                <i class="bi bi-send me-2"></i>Submit Request
+              </button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript for Location and API -->
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function () {
+        const locationBtn = document.getElementById('useCurrentLocationBtn');
+        const messageDiv = document.getElementById('locationMessage');
+
+        // Function to show friendly messages
+        function showMessage(message, type = 'info') {
+          messageDiv.style.display = 'block';
+          messageDiv.className = `alert alert-${type}`;
+          messageDiv.innerHTML = message;
+        }
+
+        function hideMessage() {
+          messageDiv.style.display = 'none';
+        }
+
+        if (locationBtn) {
+          locationBtn.addEventListener('click', function () {
+            hideMessage();
+            locationBtn.innerHTML = '<i class="bi bi-arrow-repeat me-2"></i>Getting Location...';
+            locationBtn.disabled = true;
+
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function (position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                // Fetch API key from Odoo backend
+                fetch('/pickup/get_api_key', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(data => {
+                  const apiKey = data.result.api_key;
+                  
+                  if (!apiKey) {
+                    showMessage(
+                      '<i class="bi bi-info-circle me-2"></i><strong>Location service temporarily unavailable.</strong><br/>' +
+                      'Please enter your address manually in the field below.', 
+                      'warning'
+                    );
+                    resetLocationButton();
+                    return;
+                  }
+
+                  // Google Maps reverse geocode API
+                  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&amp;key=${apiKey}`;
+
+                  fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                      if (data.status === "OK") {
+                        // Parse address components
+                        const components = data.results[0].address_components;
+                        let street_number = '', premise = '', subpremise = '', route = '', city = '', state = '', zip = '', country = '';
+                        components.forEach(function(component) {
+                          if (component.types.includes('street_number')) {
+                            street_number = component.long_name;
+                          }
+                          if (component.types.includes('premise')) {
+                            premise = component.long_name;
+                          }
+                          if (component.types.includes('subpremise')) {
+                            subpremise = component.long_name;
+                          }
+                          if (component.types.includes('route')) {
+                            route = component.long_name;
+                          }
+                          if (component.types.includes('sublocality') || component.types.includes('sublocality_level_1')) {
+                            if (route) route += ', ';
+                            route += component.long_name;
+                          }
+                          if (component.types.includes('locality')) {
+                            city = component.long_name;
+                          }
+                          if (component.types.includes('administrative_area_level_1')) {
+                            state = component.long_name;
+                          }
+                          if (component.types.includes('postal_code')) {
+                            zip = component.long_name;
+                          }
+                          if (component.types.includes('country')) {
+                            country = component.long_name;
+                          }
+                        });
+                        let house = street_number || premise || subpremise;
+                        let street = house ? (house + (route ? ', ' + route : '')) : route;
+                        document.getElementById('pickupStreet').value = street;
+                        document.getElementById('pickupCity').value = city;
+                        document.getElementById('pickupState').value = state;
+                        document.getElementById('pickupZip').value = zip;
+                        document.getElementById('pickupCountry').value = country;
+
+                        locationBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Location Found!';
+                        setTimeout(resetLocationButton, 2000);
+                      } else {
+                        showMessage(
+                          '<i class="bi bi-exclamation-triangle me-2"></i><strong>Could not detect your exact location.</strong><br/>' +
+                          'Please enter your address manually below.', 
+                          'warning'
+                        );
+                        resetLocationButton();
+                      }
+                    })
+                    .catch(err => {
+                      showMessage(
+                        '<i class="bi bi-wifi-off me-2"></i><strong>Connection issue.</strong><br/>' +
+                        'Please check your internet and try again, or enter address manually.', 
+                        'warning'
+                      );
+                      resetLocationButton();
+                    });
+                })
+                .catch(err => {
+                  showMessage(
+                    '<i class="bi bi-exclamation-triangle me-2"></i><strong>Location service unavailable.</strong><br/>' +
+                    'Please enter your pickup address manually below.', 
+                    'warning'
+                  );
+                  resetLocationButton();
+                });
+
+              }, function (error) {
+                let errorMessage = '';
+                switch(error.code) {
+                  case error.PERMISSION_DENIED:
+                    errorMessage = '<i class="bi bi-shield-x me-2"></i><strong>Location access blocked.</strong><br/>' +
+                                 'Please enable location in your browser settings or enter address manually.';
+                    break;
+                  case error.POSITION_UNAVAILABLE:
+                    errorMessage = '<i class="bi bi-geo-alt-slash me-2"></i><strong>Location not available.</strong><br/>' +
+                                 'Please enter your pickup address manually below.';
+                    break;
+                  case error.TIMEOUT:
+                    errorMessage = '<i class="bi bi-clock me-2"></i><strong>Location timeout.</strong><br/>' +
+                                 'Please try again or enter address manually.';
+                    break;
+                  default:
+                    errorMessage = '<i class="bi bi-exclamation-triangle me-2"></i><strong>Unable to get location.</strong><br/>' +
+                                 'Please enter your pickup address manually below.';
+                }
+                showMessage(errorMessage, 'info');
+                resetLocationButton();
+              });
+            } else {
+              showMessage(
+                '<i class="bi bi-phone me-2"></i><strong>Location not supported.</strong><br/>' +
+                'Your browser doesn\'t support location services. Please enter your address manually.', 
+                'info'
+              );
+              resetLocationButton();
+            }
+          });
+        }
+
+        function resetLocationButton() {
+          locationBtn.innerHTML = '<i class="bi bi-geo-alt-fill me-2"></i>Use Current Location';
+          locationBtn.disabled = false;
+        }
+      });
+    </script>
+  </template>
+</odoo>

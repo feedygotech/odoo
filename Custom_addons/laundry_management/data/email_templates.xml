@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Customer Confirmation Email Template -->
+    <record id="email_template_contact_confirmation" model="mail.template">
+        <field name="name">Contact Query - Customer Confirmation</field>
+        <field name="model_id" ref="model_laundry_contact_query"/>
+        <field name="subject">We received your inquiry - {{ object.subject }}</field>
+        <field name="email_from">{{ user.company_id.email or user.email or 'noreply@example.com' }}</field>
+        <field name="email_to">{{ object.email }}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                <div style="background-color: #f8f9fa; padding: 20px;">
+                    <div style="background-color: white; max-width: 600px; margin: 0 auto; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <!-- Header -->
+                        <div style="background-color: rgb(28, 62, 94); color: white; padding: 30px; border-radius: 8px 8px 0 0; text-align: center;">
+                            <h1 style="margin: 0; font-size: 24px;">Thank You for Contacting Us!</h1>
+                            <p style="margin: 10px 0 0 0; opacity: 0.9;">We've received your inquiry</p>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div style="padding: 30px;">
+                            <p style="font-size: 16px; margin-bottom: 20px;">Dear <strong><t t-out="object.name"/></strong>,</p>
+                            
+                            <p style="line-height: 1.6; margin-bottom: 20px;">
+                                Thank you for reaching out to us! We have successfully received your inquiry and our team will review it shortly.
+                            </p>
+                            
+                            <!-- Query Details -->
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 6px; margin: 20px 0;">
+                                <h3 style="margin: 0 0 15px 0; color: rgb(28, 62, 94);">Your Inquiry Details:</h3>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="padding: 8px 0; font-weight: bold; width: 120px;">Subject:</td>
+                                        <td style="padding: 8px 0;"><t t-out="object.subject"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; font-weight: bold;">Phone:</td>
+                                        <td style="padding: 8px 0;"><t t-out="object.phone"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; font-weight: bold;">Email:</td>
+                                        <td style="padding: 8px 0;"><t t-out="object.email"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; font-weight: bold; vertical-align: top;">Message:</td>
+                                        <td style="padding: 8px 0;"><t t-out="object.message"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <p style="line-height: 1.6; margin-bottom: 20px;">
+                                <strong>What happens next?</strong><br/>
+                                Our team will review your inquiry and get back to you within 24 hours. You'll receive a response at this email address.
+                            </p>
+                            
+                            <p style="line-height: 1.6; margin-bottom: 20px;">
+                                If you have any urgent questions, feel free to call us directly at our customer service number.
+                            </p>
+                        </div>
+                        
+                        <!-- Footer -->
+                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; text-align: center;">
+                            <p style="margin: 0; color: #6c757d; font-size: 14px;">
+                                Best regards,<br/>
+                                <strong>Laundry Management Team</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <!-- Staff Notification Email Template -->
+    <record id="email_template_staff_notification" model="mail.template">
+        <field name="name">Contact Query - Staff Assignment Notification</field>
+        <field name="model_id" ref="model_laundry_contact_query"/>
+        <field name="subject">New Query Assigned: {{ object.subject }}</field>
+        <field name="email_from">{{ user.company_id.email or user.email or 'noreply@example.com' }}</field>
+        <field name="email_to">{{ object.assigned_to.email }}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                <div style="background-color: #f8f9fa; padding: 20px;">
+                    <div style="background-color: white; max-width: 600px; margin: 0 auto; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <!-- Header -->
+                        <div style="background-color: #17a2b8; color: white; padding: 30px; border-radius: 8px 8px 0 0; text-align: center;">
+                            <h1 style="margin: 0; font-size: 24px;">Query Assigned to You</h1>
+                            <p style="margin: 10px 0 0 0; opacity: 0.9;">Please review and respond</p>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div style="padding: 30px;">
+                            <p style="font-size: 16px; margin-bottom: 20px;">Hello <strong><t t-out="object.assigned_to.name"/></strong>,</p>
+                            
+                            <p style="line-height: 1.6; margin-bottom: 20px;">
+                                A customer inquiry has been assigned to you. Please review the details below and respond within 24 hours.
+                            </p>
+                            
+                            <!-- Customer Details -->
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 6px; margin: 20px 0;">
+                                <h3 style="margin: 0 0 15px 0; color: #17a2b8;">Customer Information:</h3>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="padding: 8px 0; font-weight: bold; width: 120px;">Name:</td>
+                                        <td style="padding: 8px 0;"><t t-out="object.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; font-weight: bold;">Phone:</td>
+                                        <td style="padding: 8px 0;"><t t-out="object.phone"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; font-weight: bold;">Email:</td>
+                                        <td style="padding: 8px 0;"><t t-out="object.email"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; font-weight: bold;">Subject:</td>
+                                        <td style="padding: 8px 0;"><t t-out="object.subject"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; font-weight: bold;">Priority:</td>
+                                        <td style="padding: 8px 0;">
+                                            <span style="padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; color: white; background-color: #6c757d;">
+                                                <t t-out="object.priority.title()"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; font-weight: bold; vertical-align: top;">Message:</td>
+                                        <td style="padding: 8px 0;"><t t-out="object.message"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <p style="line-height: 1.6; margin-bottom: 20px;">
+                                <strong>What to do next:</strong><br/>
+                                1. Review the customer's inquiry carefully<br/>
+                                2. Prepare an appropriate response<br/>
+                                3. Update the query status and add your response<br/>
+                                4. Mark as resolved to automatically send the response to the customer
+                            </p>
+                            
+                            <div style="text-align: center; margin: 30px 0;">
+                                <a t-attf-href="/web#id={{object.id}}&amp;model=laundry.contact.query&amp;view_type=form" 
+                                   style="background-color: #17a2b8; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
+                                    View Query Details
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Footer -->
+                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; text-align: center;">
+                            <p style="margin: 0; color: #6c757d; font-size: 14px;">
+                                Laundry Management System - Staff Notification
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <!-- Customer Response Email Template -->
+    <record id="email_template_customer_response" model="mail.template">
+        <field name="name">Contact Query - Customer Response</field>
+        <field name="model_id" ref="model_laundry_contact_query"/>
+        <field name="subject">Response to your inquiry: {{ object.subject }}</field>
+        <field name="email_from">{{ user.company_id.email or user.email or 'noreply@example.com' }}</field>
+        <field name="email_to">{{ object.email }}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                <div style="background-color: #f8f9fa; padding: 20px;">
+                    <div style="background-color: white; max-width: 600px; margin: 0 auto; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <!-- Header -->
+                        <div style="background-color: rgb(28, 62, 94); color: white; padding: 30px; border-radius: 8px 8px 0 0; text-align: center;">
+                            <h1 style="margin: 0; font-size: 24px;">We Have a Response for You!</h1>
+                            <p style="margin: 10px 0 0 0; opacity: 0.9;">Thank you for your patience</p>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div style="padding: 30px;">
+                            <p style="font-size: 16px; margin-bottom: 20px;">Dear <strong><t t-out="object.name"/></strong>,</p>
+                            
+                            <p style="line-height: 1.6; margin-bottom: 20px;">
+                                Thank you for contacting us. We have reviewed your inquiry and prepared a response for you.
+                            </p>
+                            
+                            <!-- Original Query -->
+                            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 6px; margin: 20px 0;">
+                                <h4 style="margin: 0 0 10px 0; color: #6c757d;">Your Original Inquiry:</h4>
+                                <p style="margin: 0; font-style: italic;">"<t t-out="object.message"/>"</p>
+                            </div>
+                            
+                            <!-- Response -->
+                            <div style="background-color: #e8f5e8; border-left: 4px solid #28a745; padding: 20px; margin: 20px 0;">
+                                <h3 style="margin: 0 0 15px 0; color: rgb(28, 62, 94);">Our Response:</h3>
+                                <div style="line-height: 1.6;"><t t-out="object.response or 'No response provided yet.'"/></div>
+                            </div>
+                            
+                            <p style="line-height: 1.6; margin-bottom: 20px;">
+                                If you have any follow-up questions or need further assistance, please don't hesitate to contact us again.
+                            </p>
+                            
+                            <p style="line-height: 1.6; margin-bottom: 20px;">
+                                <strong>Need more help?</strong><br/>
+                                You can always reach out to us through our website contact form or call our customer service line.
+                            </p>
+                        </div>
+                        
+                        <!-- Footer -->
+                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; text-align: center;">
+                            <p style="margin: 0; color: #6c757d; font-size: 14px;">
+                                Best regards,<br/>
+                                <strong>Laundry Management Team</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </field>
+    </record>
+</odoo>

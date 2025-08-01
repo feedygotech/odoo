@@ -1,0 +1,255 @@
+/* Service Card Styling */
+.laundry-card-link {
+  display: block;
+  text-decoration: none;
+  height: 100%;
+}
+.laundry-card-link:hover,
+.laundry-card-link:focus {
+  text-decoration: none;
+}
+
+.laundry-card {
+  border-radius: 18px;
+  overflow: hidden;
+  transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+}
+
+.laundry-card:hover,
+.laundry-card:focus {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  transform: translateY(-6px) scale(1.03);
+  z-index: 2;
+}
+
+.laundry-card-img {
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.laundry-card:hover .laundry-card-img {
+  transform: scale(1.07);
+}
+
+.laundry-card .card-title {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.laundry-card .card-text {
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+/* Service Detail Page Styling */
+.service-detail-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 3rem 0;
+  margin-bottom: 3rem;
+}
+
+.service-detail-content {
+  background: #f8f9fa;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.service-detail-image {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.service-detail-info {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading Animation */
+.laundry-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.laundry-loading .spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Price Snippet Styling */
+.s_laundry_price_snippet .service-selection-panel {
+  background: linear-gradient(135deg, #e0f7fa 0%, #f8fafc 100%);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+.s_laundry_price_snippet .service-list {
+  margin: 0;
+  padding: 0;
+}
+.s_laundry_price_snippet .service-item {
+  background: #e6e9ef;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  font-weight: 500;
+  color: #222;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+.s_laundry_price_snippet .service-item.active {
+  background: linear-gradient(90deg, #1e88e5 0%, #26c6da 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(30, 136, 229, 0.1);
+}
+.s_laundry_price_snippet .service-item .badge.popular {
+  background: #ffd600;
+  color: #222;
+  font-size: 0.85em;
+  font-weight: 600;
+  border-radius: 8px;
+  margin-left: 10px;
+  padding: 2px 8px;
+}
+
+@media (max-width: 991px) {
+  .s_laundry_price_snippet .col-md-4,
+  .s_laundry_price_snippet .col-md-8 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .s_laundry_price_snippet .service-selection-panel {
+    margin-bottom: 24px;
+  }
+}
+
+/* --- Skeleton Loader Polishing --- */
+.s_laundry_price_snippet .skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.2s ease-in-out infinite;
+  border-radius: 6px;
+  min-height: 24px;
+}
+.s_laundry_price_snippet .service-item.skeleton {
+  height: 44px;
+  margin-bottom: 12px;
+  min-width: 120px;
+}
+.s_laundry_price_snippet .pricing-header.skeleton {
+  height: 36px;
+  margin-bottom: 16px;
+}
+.s_laundry_price_snippet .pricing-table .skeleton {
+  height: 38px;
+  margin-bottom: 0;
+}
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.s_laundry_price_snippet .pricing-table tr {
+  border-bottom: none;
+}
+
+.s_laundry_price_snippet .pricing-details-panel {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: none;
+  padding: 0;
+}
+.s_laundry_price_snippet .pricing-header {
+  background: linear-gradient(90deg, #1976d2 0%, #26c6da 100%);
+  color: #fff;
+  border-radius: 16px 16px 0 0;
+  font-weight: 700;
+}
+
+.s_laundry_price_snippet .pricing-table {
+  background: #fff;
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+.s_laundry_price_snippet .pricing-table th {
+  background: #fff;
+  color: #222;
+  font-weight: 700;
+  border: none;
+  padding: 16px 18px;
+}
+.s_laundry_price_snippet .pricing-table td {
+  background: #fff;
+  color: #222;
+  font-weight: 500;
+  height: 44px;
+  vertical-align: middle;
+  padding: 0 18px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.s_laundry_price_snippet .pricing-table .text-primary {
+  color: #1976d2 !important;
+  font-weight: 700;
+}
+
+/* --- Category Cell --- */
+.s_laundry_price_snippet .category-row .category-cell {
+  background: #e3f2fd;
+  border-radius: 0;
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #111;
+  min-width: 200px;
+  text-align: left;
+  padding: 0 18px;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+.s_laundry_price_snippet .category-cell .fw-bold {
+  color: #111 !important;
+  padding-left: 8px;
+}
+
+/* --- Category Icon --- */
+.s_laundry_price_snippet .category-icon {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 1.3em;
+  vertical-align: middle;
+  color: #1976d2;
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .laundry-card {
+    margin-bottom: 1.5rem;
+  }
+
+  .service-detail-content {
+    padding: 1rem;
+  }
+
+  .service-detail-info {
+    padding: 1.5rem;
+  }
+}

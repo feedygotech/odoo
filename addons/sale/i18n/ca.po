@@ -25,23 +25,23 @@
 # Quim - coopdevs <quim.rebull@coopdevs.org>, 2024
 # Pere Martínez, 2024
 # Martin Trigaux, 2024
-# Xavier, 2024
+# Harcogourmet, 2024
 # marcescu, 2025
 # Ivan Espinola, 2025
 # Óscar Fonseca <tecnico@pyming.com>, 2025
-# Santiago Payà <santiagopim@gmail.com>, 2025
 # EstudiTIC - estuditic.com <odoo@estuditic.com>, 2025
 # Josep Anton Belchi, 2025
-# Wil Odoo, 2025
 # Noemi Pla, 2025
+# Santiago Payà <santiagopim@gmail.com>, 2025
+# Wil Odoo, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-07 20:37+0000\n"
+"POT-Creation-Date: 2025-06-06 18:38+0000\n"
 "PO-Revision-Date: 2024-09-25 09:41+0000\n"
-"Last-Translator: Noemi Pla, 2025\n"
+"Last-Translator: Wil Odoo, 2025\n"
 "Language-Team: Catalan (https://app.transifex.com/odoo/teams/41243/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -169,6 +169,49 @@ msgid ""
 "</div>\n"
 "            "
 msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"    <p style=\"margin: 0px; padding: 0px; font-size: 12px;\">\n"
+"        <t t-set=\"transaction_sudo\" t-value=\"object.get_portal_last_transaction()\"/>\n"
+"        Hola:\n"
+"        <br/><br/>\n"
+"        El pagament amb referència\n"
+"        <span style=\"font-weight:bold;\" t-out=\"transaction_sudo.reference or ''\">SOOO49</span>\n"
+"        per un import de\n"
+"        <span style=\"font-weight:bold;\" t-out=\"format_amount(transaction_sudo.amount, object.currency_id) or ''\">10 €</span>\n"
+"        per a la seva comanda\n"
+"        <span style=\"font-weight:bold;\" t-out=\"object.name or ''\">S00049</span>\n"
+"        <t t-if=\"transaction_sudo and transaction_sudo.state == 'pending'\">\n"
+"            està pendent.\n"
+"            <br/>\n"
+"            <t t-if=\"object.currency_id.compare_amounts(object.amount_paid + transaction_sudo.amount, object.amount_total) &gt;= 0 and object.state in ('draft', 'sent')\">\n"
+"                Es confirmarà la comanda un cop es confirmi el pagament.\n"
+"            </t>\n"
+"            <t t-else=\"\">\n"
+"                Un cop confirmat el pagament,\n"
+"                <span style=\"font-weight:bold;\" t-out=\"format_amount(object.amount_total - object.amount_paid - transaction_sudo.amount, object.currency_id) or ''\">10 €</span>\n"
+"                quedaran pendents d'abonar.\n"
+"            </t>\n"
+"        </t>\n"
+"        <t t-else=\"\">\n"
+"            s'ha confirmat.\n"
+"            <t t-if=\"object.currency_id.compare_amounts(object.amount_paid, object.amount_total) &lt; 0\">\n"
+"                <br/>\n"
+"                <span style=\"font-weight:bold;\" t-out=\"format_amount(object.amount_total - object.amount_paid, object.currency_id) or ''\">10 €</span>\n"
+"                a pagar.\n"
+"            </t>\n"
+"        </t>\n"
+"        <br/><br/>\n"
+"        Gràcies per la seva confiança!\n"
+"        <br/>\n"
+"        No dubti a contactar amb nosaltres si té alguna pregunta.\n"
+"        <t t-if=\"not is_html_empty(object.user_id.signature)\" data-o-mail-quote-container=\"1\">\n"
+"            <br/><br/>\n"
+"            <t t-out=\"object.user_id.signature or ''\" data-o-mail-quote=\"1\">--<br data-o-mail-quote=\"1\"/>Mitchell Admin</t>\n"
+"        </t>\n"
+"        <br/><br/>\n"
+"    </p>\n"
+"</div>\n"
+"            "
 
 #. module: sale
 #: model:mail.template,body_html:sale.mail_template_sale_confirmation
@@ -966,6 +1009,11 @@ msgstr "<span>Compte: aquesta comanda podria ser un duplicat de</span>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
+msgid "<strong class=\"d-block mt-3\">Shipping Address</strong>"
+msgstr "<strong class=\"d-block mt-3\">Adreça d'enviament</strong>"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
 #: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_content
 msgid "<strong class=\"mr16\">Subtotal</strong>"
 msgstr "<strong class=\"mr16\">Subtotal</strong>"
@@ -984,11 +1032,6 @@ msgstr "<strong>Observació de la posició fiscal :</strong>"
 #: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
 msgid "<strong>Salesperson</strong>"
 msgstr "<strong>Comercial</strong>"
-
-#. module: sale
-#: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
-msgid "<strong>Shipping Address</strong>"
-msgstr "<strong>Adreça d'enviament</strong>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
@@ -2371,6 +2414,11 @@ msgstr "Signatura electrònica"
 #: model:ir.model.fields,field_description:sale.field_sale_payment_provider_onboarding_wizard__paypal_email_account
 msgid "Email"
 msgstr "Correu electrònic"
+
+#. module: sale
+#: model:ir.model,name:sale.model_mail_compose_message
+msgid "Email composition wizard"
+msgstr "Assistent de redacció d'emails"
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_res_config_settings__invoice_mail_template_id
@@ -4509,6 +4557,11 @@ msgid "Salespersons"
 msgstr "Comercials"
 
 #. module: sale
+#: model:ir.model,name:sale.model_mail_scheduled_message
+msgid "Scheduled Message"
+msgstr "Missatge programat"
+
+#. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.view_sales_order_filter
 #: model_terms:ir.ui.view,arch_db:sale.view_sales_order_line_filter
 msgid "Search Sales Order"
@@ -4669,7 +4722,7 @@ msgstr "Enviament"
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_content
 msgid "Shipping Address"
-msgstr "Direcció d'enviament"
+msgstr "Adreça d'enviament"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_shiprocket
@@ -5552,12 +5605,6 @@ msgstr "Graella d'entrada de variants"
 #: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_template
 msgid "View Details"
 msgstr "Mostra detalls"
-
-#. module: sale
-#. odoo-python
-#: code:addons/sale/models/sale_order.py:0
-msgid "View Order"
-msgstr "Veure comanda"
 
 #. module: sale
 #. odoo-python

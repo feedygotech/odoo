@@ -49,3 +49,9 @@ package.json
 /man/
 /share/
 /src/
+
+# data files
+/data/
+
+# odoo log files
+*.log
