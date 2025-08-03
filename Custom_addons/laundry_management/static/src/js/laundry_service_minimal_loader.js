@@ -3,8 +3,8 @@
 import publicWidget from "@web/legacy/js/public/public_widget";
 import { rpc } from "@web/core/network/rpc";
 
-publicWidget.registry.LaundryServicesLoader = publicWidget.Widget.extend({
-  selector: "#dynamic_laundry_services",
+publicWidget.registry.LaundryServiceMinimalLoader = publicWidget.Widget.extend({
+  selector: "#dynamic_laundry_service_minimal",
 
   async willStart() {
     try {
@@ -37,4 +37,4 @@ publicWidget.registry.LaundryServicesLoader = publicWidget.Widget.extend({
   },
 });
 
-export default publicWidget.registry.LaundryServicesLoader;
+export default publicWidget.registry.LaundryServiceMinimalLoader;

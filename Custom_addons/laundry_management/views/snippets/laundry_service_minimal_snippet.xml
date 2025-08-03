@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+  <!-- This is the actual snippet structure shown when dropped -->
+  <template id="laundry_service_minimal_snippet" name="Laundry Service Minimal Snippet" t-name="laundry_management.laundry_service_minimal_snippet">
+    <section class="s_laundry_service_minimal_snippet o_colored_level pt32 pb32"
+             data-snippet="laundry_service_minimal_snippet"
+             data-name="Laundry Service Minimal" style="min-height: 200px;">
+      <div class="container">
+        <div class="row s_nb_column_fixed">
+          <div class="col-12">
+            <div class="text-center mb-2">
+              <h2 class="display-5 fw-bold" style ="color:#175AA9">Our Services</h2>
+            </div>
+
+            <div class="row" id="dynamic_laundry_service_minimal">
+              <!-- Dynamic data loads here via JS -->
+              <div class="text-center w-100">
+                <i class="fa fa-spinner fa-spin text-primary" style="font-size: 24px;"></i> Loading...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- Dynamic content rendered via controller and JS -->
+  <template id="laundry_service_minimal_content" name="Laundry Service Minimal Content">
+<div class="row g-4">
+  <t t-foreach="services" t-as="service">
+    <div class="col-md-6 col-lg-4">
+      <a t-att-href="'/services/' + service.url" class="text-decoration-none">
+        <div class="card h-100 border-1 rounded-4 overflow-hidden" style="transition: all 0.3s ease;">
+          
+          <!-- Image -->
+          <div class="w-100" style="height: 250px; overflow: hidden;">
+            <img t-if="service.image"
+                 t-attf-src="/web/image/laundry.service/{{ service.id }}/image"
+                 alt="Service Image"
+                 class="w-100 h-100"
+                 style="object-fit: cover; transition: transform 0.3s ease;" />
+            <div t-else=""
+                 class="d-flex align-items-center justify-content-center bg-light w-100 h-100">
+              <i class="fa fa-image fa-3x text-muted"></i>
+            </div>
+          </div>
+
+          <!-- Name -->
+          <div class="card-body text-center py-4" style="background-color: #fff;">
+            <h5 class="fw-bold text-primary mb-0" style="font-size: 28px;">
+              <t t-esc="service.name"/>
+            </h5>
+          </div>
+
+        </div>
+      </a>
+    </div>
+  </t>
+</div>
+
+  <!-- View All Button -->
+  <div class="text-center mt-4">
+    <a href="/our-services" class="btn btn-view montserrat-medium">
+      View All Services
+      <i class="fa fa-arrow-right ms-2"></i>
+    </a>
+  </div>
+</template>
+</odoo>

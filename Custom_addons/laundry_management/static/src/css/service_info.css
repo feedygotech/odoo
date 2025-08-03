@@ -1,0 +1,175 @@
+
+/* Service Grid Styles */
+.s_service_grid {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.service-title {
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: #175AA9;
+}
+
+.service-description {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    color: #000000;
+}
+
+.montserrat {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.montserrat-regular {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+.montserrat-medium {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.service-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+
+    transition: transform 0.3s ease;
+}
+
+.service-image-wrapper:hover {
+    transform: translateY(-5px);
+}
+
+.service-row {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.detail-description {
+    background-color: #E8F8FA;
+    opacity: 1;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Skeleton Loading Styles */
+.service-grid-skeleton {
+    animation: pulse 1.5s infinite;
+}
+
+.skeleton-text-lg {
+    height: 40px;
+    background: #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    width: 80%;
+}
+
+.skeleton-text {
+    height: 20px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+.skeleton-button {
+    height: 45px;
+    width: 150px;
+    background: #e2e8f0;
+    border-radius: 25px;
+}
+
+.skeleton-image {
+    height: 380px;
+    background: #e2e8f0;
+    border-radius: 12px;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+    .service-row {
+        text-align: left;
+        flex-direction: column !important;
+    }
+    
+    /* Force image to always be first on mobile */
+    .service-row > .col-lg-6:nth-child(2) {
+        order: -1;
+    }
+    
+    .service-image-wrapper {
+        margin-top: 0;
+        margin-bottom: 2rem;
+        max-height: 300px;
+    }
+    
+    .skeleton-image {
+        height: 300px;
+        margin: 2rem 0;
+    }
+    
+    .service-title {
+        font-size: 2rem;
+        text-align:left;
+        line-height: 1.5;
+    }
+
+    .service-description{
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .detail-description {
+    background-color: #FFF;
+    opacity: 1;
+    }
+}
+
+/* Button Styles */
+.btn-view {
+    padding: 12px 30px;
+    border-radius: 25px;
+    text-transform: uppercase;
+    color: #ffffff;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    background-color: #175AA9;
+}
+
+.btn-view:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(43, 55, 132, 0.2);
+}
+
+.btn-view .fa-arrow-right {
+    transition: transform 0.3s ease;
+}
+
+.btn-view:hover .fa-arrow-right {
+    transform: translateX(5px);
+}

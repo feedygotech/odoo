@@ -192,9 +192,19 @@ class LaundryWebsite(http.Controller):
     def laundry_services_snippet(self, **kw):
         services = request.env['laundry.service'].sudo().search([
             ('is_published', '=', True), ('active', '=', True)
+        ], limit=3)
+        return request.env['ir.qweb']._render(
+        'laundry_management.laundry_service_minimal_content',
+        {'services': services}
+        )
+
+    @http.route('/services-info/snippet', type='json', auth='public', website=True)
+    def laundry_services_info_snippet(self, **kw):
+        services = request.env['laundry.service'].sudo().search([
+            ('is_published', '=', True), ('active', '=', True)
         ])
         return request.env['ir.qweb']._render(
-        'laundry_management.laundry_services_snippet_content',
+        'laundry_management.laundry_service_info_content',
         {'services': services}
         )
 
