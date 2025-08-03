@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Main Snippet Template -->
+    <template id="laundry_service_info_snippet" name="Laundry Service Info Snippet" t-name="laundry_management.laundry_service_info_snippet">
+        <section class="s_laundry_services_content o_colored_level pt32 pb32"
+                data-snippet="laundry_service_info_snippet"
+                data-name="Laundry Service Info Snippet" style="min-height: 200px;">
+            <div class="container">
+                <div class="row s_nb_column_fixed">
+                    <div class="col-12">
+                        <div class="text-center mb-2">
+                            <h2 class="display-5 fw-bold" style ="color:#175AA9">Our Services</h2>
+                            <p class="text-muted">Discover our comprehensive range of professional laundry services</p>
+                        </div>
+
+                        <div class="row m-0" id="dynamic_laundry_service_info">
+                            <!-- Dynamic data loads here via JS -->
+                            <div class="text-center w-100">
+                                <i class="fa fa-spinner fa-spin text-primary" style="font-size: 24px;"></i> Loading...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <!-- Dynamic Content Template -->
+    <template id="laundry_service_info_content" name="Laundry Service Info Content">
+        <t t-foreach="services" t-as="service">
+            <!-- Alternate row layout using index -->
+            <div t-attf-class="row mb-5 mt-5 py-2 service-row {{ 'flex-row-reverse' if service.id % 2 else '' }}">
+                <div t-attf-class="col-lg-6 {{ 'ps-lg-5' if service.id % 2 else 'pe-lg-5' }} pt-lg-3">
+                    <h2 class="service-title mb-2 montserrat" t-esc="service.name"/>
+                    <div class="service-description montserrat-regular mb-2">
+                        <p t-esc="service.overview"/>
+                    </div>
+                    <a t-att-href="'/services/' + service.url" class="btn btn-view montserrat-medium">
+                        View Details
+                        <i class="fa fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+                <div class="col-lg-6">
+                    <div class="service-image-wrapper">
+                        <img t-if="service.image" 
+                             t-attf-src="/web/image/laundry.service/{{ service.id }}/image"
+                             class="img-fluid rounded-3 shadow-lg"
+                             t-att-alt="service.name"/>
+                        <div t-else="" 
+                             class="placeholder-image rounded-3 d-flex align-items-center justify-content-center bg-light">
+                            <i class="fa fa-tshirt fa-4x text-muted"></i>
+                     </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

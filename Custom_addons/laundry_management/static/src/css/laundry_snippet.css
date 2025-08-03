@@ -111,9 +111,12 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 .s_laundry_price_snippet .service-item.active {
-  background: linear-gradient(90deg, #1e88e5 0%, #26c6da 100%);
+  background: #175AA9;
   color: #fff;
   box-shadow: 0 2px 8px rgba(30, 136, 229, 0.1);
+  border:1px solid #175AA9;
+  font-size: 1.25rem;
+  font-weight: bold;
 }
 .s_laundry_price_snippet .service-item .badge.popular {
   background: #ffd600;
@@ -177,10 +180,11 @@
   padding: 0;
 }
 .s_laundry_price_snippet .pricing-header {
-  background: linear-gradient(90deg, #1976d2 0%, #26c6da 100%);
+  background:#175AA9;
   color: #fff;
   border-radius: 16px 16px 0 0;
-  font-weight: 700;
+  font-weight: 600;
+  text-align: center;
 }
 
 .s_laundry_price_snippet .pricing-table {
@@ -189,9 +193,10 @@
   padding-bottom: 32px;
 }
 .s_laundry_price_snippet .pricing-table th {
-  background: #fff;
+  background: #9dddff;
   color: #222;
   font-weight: 700;
+  font-size: 1.25rem;
   border: none;
   padding: 16px 18px;
 }
@@ -202,11 +207,11 @@
   height: 44px;
   vertical-align: middle;
   padding: 0 18px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #9c9b9b;
 }
 
 .s_laundry_price_snippet .pricing-table .text-primary {
-  color: #1976d2 !important;
+  color: #175AA9 !important;
   font-weight: 700;
 }
 
@@ -220,8 +225,8 @@
   min-width: 200px;
   text-align: left;
   padding: 0 18px;
-  border-top: 1px solid #e0e0e0;
-  border-bottom: 1px solid #e0e0e0;
+  border-top: 1px solid #9c9b9b;
+  border-bottom: 1px solid #9c9b9b;
 }
 .s_laundry_price_snippet .category-cell .fw-bold {
   color: #111 !important;
