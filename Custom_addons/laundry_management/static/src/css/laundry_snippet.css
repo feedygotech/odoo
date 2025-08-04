@@ -98,12 +98,13 @@
   padding: 0;
 }
 .s_laundry_price_snippet .service-item {
-  background: #e6e9ef;
+  background: #fff;
   border-radius: 12px;
   padding: 14px 18px;
   margin-bottom: 12px;
-  font-weight: 500;
-  color: #222;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #175AA9;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -114,7 +115,6 @@
   background: #175AA9;
   color: #fff;
   box-shadow: 0 2px 8px rgba(30, 136, 229, 0.1);
-  border:1px solid #175AA9;
   font-size: 1.25rem;
   font-weight: bold;
 }
