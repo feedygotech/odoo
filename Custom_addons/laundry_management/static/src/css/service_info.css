@@ -10,8 +10,9 @@
     color: #175AA9;
 }
 
-.service-description {
+.service-overview {
     font-size: 1.25rem;
+    text-align: justify;
     line-height: 1.8;
     color: #000000;
 }
@@ -35,8 +36,8 @@
     position: relative;
     overflow: hidden;
     border-radius: 12px;
-
     transition: transform 0.3s ease;
+    max-height: 500px;
 }
 
 .service-image-wrapper:hover {
@@ -53,6 +54,13 @@
     background-color: #E8F8FA;
     opacity: 1;
 }
+
+.category-block table th,
+.category-block table td {
+  width: 50%;
+  text-align: center;
+}
+
 
 @keyframes fadeInUp {
     to {
@@ -137,14 +145,20 @@
         line-height: 1.5;
     }
 
-    .service-description{
+    .service-overview{
         font-size: 1rem;
         line-height: 1.5;
+        text-align: left;
     }
 
     .detail-description {
     background-color: #FFF;
     opacity: 1;
+    }
+
+    #laundry_service_minimal_content .row > * {
+        padding-left: auto !important;
+        padding-right: auto !important;
     }
 }
 

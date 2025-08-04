@@ -40,7 +40,6 @@
         'views/washing_washing_views.xml',
         'views/label_templates.xml',
         'views/service_views.xml',
-        'views/website_templates.xml',
         'views/laundry_service_detail.xml',
         'views/pricing_preview.xml',
         'views/laundry_order_analysis_views.xml',

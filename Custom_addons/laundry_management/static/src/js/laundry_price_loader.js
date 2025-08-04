@@ -67,7 +67,7 @@ renderPricingTable(service) {
   };
 
   let html = `<div class="pricing-header p-3 mb-1">
-    <h3 class="fw-bold mb-4">${service.name}</h3>
+    <h3 class="fw-bold mb-2">${service.name}</h3>
   </div>`;
 
   let hasProducts = false;
@@ -78,8 +78,8 @@ renderPricingTable(service) {
     const collapseId = `collapse-${index}`;
     html += `
       <div class="category-block mb-3">
-        <div class="category-header bg-light p-3 border rounded d-flex justify-content-between align-items-center" 
-             data-bs-toggle="collapse" data-bs-target="#${collapseId}" style="cursor:pointer;">
+        <div class="category-header p-3 border rounded d-flex justify-content-between align-items-center" 
+             data-bs-toggle="collapse" data-bs-target="#${collapseId}" style="cursor:pointer; background: #deeeffff">
           <span class="fw-bold text-dark">${cat.name}</span>
           <i class="fa fa-chevron-down text-muted"></i>
         </div>
@@ -88,14 +88,14 @@ renderPricingTable(service) {
             <thead>
               <tr>
                 <th>Item</th>
-                <th class="text-end">Price</th>
+                <th>Price</th>
               </tr>
             </thead>
             <tbody>
               ${cat.products.map(p => `
                 <tr>
                   <td>${p.name}</td>
-                  <td class="text-end text-primary fw-bold">${formatPrice(p.price)}</td>
+                  <td class="text-primary fw-bold">${formatPrice(p.price)}</td>
                 </tr>
               `).join('')}
             </tbody>

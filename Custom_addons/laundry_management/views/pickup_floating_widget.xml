@@ -101,8 +101,8 @@
           #pickup-floating-btn {
             width: 80px;
             height: 80px;
-            bottom: 100px;
-            right: 20px;
+            bottom: 160px;
+            right: 10px;
           }
           
           #pickup-floating-btn .pickup-image {

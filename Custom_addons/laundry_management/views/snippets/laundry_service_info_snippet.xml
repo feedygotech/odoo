@@ -10,7 +10,7 @@
                     <div class="col-12">
                         <div class="text-center mb-2">
                             <h2 class="display-5 fw-bold" style ="color:#175AA9">Our Services</h2>
-                            <p class="text-muted">Discover our comprehensive range of professional laundry services</p>
+                            <p class="text-muted fs-sm">Discover our comprehensive range of professional laundry services</p>
                         </div>
 
                         <div class="row m-0" id="dynamic_laundry_service_info">
@@ -29,10 +29,10 @@
     <template id="laundry_service_info_content" name="Laundry Service Info Content">
         <t t-foreach="services" t-as="service">
             <!-- Alternate row layout using index -->
-            <div t-attf-class="row mb-5 mt-5 py-2 service-row {{ 'flex-row-reverse' if service.id % 2 else '' }}">
+            <div t-attf-class="row mb-4 mt-5 py-2 service-row {{ 'flex-row-reverse' if service.id % 2 else '' }}">
                 <div t-attf-class="col-lg-6 {{ 'ps-lg-5' if service.id % 2 else 'pe-lg-5' }} pt-lg-3">
                     <h2 class="service-title mb-2 montserrat" t-esc="service.name"/>
-                    <div class="service-description montserrat-regular mb-2">
+                    <div class="service-overview montserrat-regular mb-2">
                         <p t-esc="service.overview"/>
                     </div>
                     <a t-att-href="'/services/' + service.url" class="btn btn-view montserrat-medium">
