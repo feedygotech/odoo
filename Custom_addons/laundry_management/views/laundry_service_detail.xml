@@ -47,7 +47,7 @@
           <!-- Features -->
           <t t-if="features">
             <div class="col-md-6">
-              <div class="p-4 border rounded-4 shadow bg-white h-100" style="margin-left:1.5rem;">
+              <div class="p-4 border rounded-4 shadow bg-white h-100" style="margin-left:0.25rem;">
                 <h2 class="fw-bold fs-3 mb-3 pt-1 pb-1" style="color:#1C3E5E">Service Features</h2>
                 <ul class="list-unstyled fs-6">
                   <t t-foreach="features" t-as="feature">
